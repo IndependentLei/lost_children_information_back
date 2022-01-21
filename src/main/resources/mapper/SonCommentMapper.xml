@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lry.lostchildinfo.mapper.SonCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lry.lostchildinfo.entity.pojo.SonComment">
+        <id column="id" property="id" />
+        <result column="father_comment_id" property="fatherCommentId" />
+        <result column="user_id" property="userId" />
+        <result column="user_code" property="userCode" />
+        <result column="replay_id" property="replayId" />
+        <result column="replay_context" property="replayContext" />
+        <result column="replay_code" property="replayCode" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>

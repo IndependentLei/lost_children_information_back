@@ -1,0 +1,9 @@
+# 项目版本
+LostChildInfo:
+  version: 1.0.0
+
+
+
+spring:
+  profiles:
+    active: dev

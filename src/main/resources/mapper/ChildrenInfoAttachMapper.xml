@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lry.lostchildinfo.mapper.ChildrenInfoAttachMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach">
+        <id column="id" property="id" />
+        <result column="children_info_id" property="childrenInfoId" />
+        <result column="pic" property="pic" />
+        <result column="create_time" property="createTime" />
+        <result column="create_id" property="createId" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_id" property="updateId" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>

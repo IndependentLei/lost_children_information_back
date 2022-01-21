@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lry.lostchildinfo.mapper.MenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lry.lostchildinfo.entity.pojo.Menu">
+        <id column="menu_id" property="menuId" />
+        <result column="label" property="label" />
+        <result column="icon" property="icon" />
+        <result column="menu_path" property="menuPath" />
+        <result column="component" property="component" />
+        <result column="menu_name" property="menuName" />
+        <result column="create_time" property="createTime" />
+        <result column="create_id" property="createId" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_id" property="updateId" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>
