@@ -1,4 +1,4 @@
-package com.lry.lostchildinfo.config;
+package com.lry.lostchildinfo.config.redis;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

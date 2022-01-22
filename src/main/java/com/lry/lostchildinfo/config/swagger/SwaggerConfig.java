@@ -1,4 +1,4 @@
-package com.lry.lostchildinfo.config;
+package com.lry.lostchildinfo.config.swagger;
 
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;

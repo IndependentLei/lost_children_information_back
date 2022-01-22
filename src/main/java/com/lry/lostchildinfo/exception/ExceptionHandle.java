@@ -3,8 +3,8 @@ package com.lry.lostchildinfo.exception;
 import com.lry.lostchildinfo.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author : jdl
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @ClassName : ExceptionHandle
  * @create : 2022-01-21 19:45
  */
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class ExceptionHandle {
     /**
@@ -34,6 +34,7 @@ public class ExceptionHandle {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result exceptionHandler(MethodArgumentNotValidException e) {
+        log.info("jinliale");
         log.error(e.getMessage());
         return Result.error(e.getMessage());
     }
