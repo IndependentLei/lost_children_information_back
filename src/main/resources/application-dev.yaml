@@ -3,6 +3,10 @@ server:
 
 # 数据库配置
 spring:
+  security:
+    user:
+      name: user
+      password: 111111
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
   datasource:

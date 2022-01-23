@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @SpringBootTest
 class LostChildInfoApplicationTests {
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Test
     void contextLoads() {
@@ -75,6 +79,12 @@ class LostChildInfoApplicationTests {
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();
+    }
+
+    @Test
+    public void test(){
+        String name = bCryptPasswordEncoder.encode("111111");
+        System.out.println(name);
     }
 
 }

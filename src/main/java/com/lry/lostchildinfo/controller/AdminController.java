@@ -42,7 +42,7 @@ public class AdminController {
     }
 
     @PostMapping("login")
-    public Result login(@Validated @RequestBody AdminPo adminPo){
+    public Result login( AdminPo adminPo){
         log.info("进来了");
         Admin admin = adminService.getOne(new LambdaQueryWrapper<Admin>()
                 .eq(Admin::getUserCode, adminPo.getUserCode()).eq(Admin::getUserPwd,adminPo.getUserPwd()));

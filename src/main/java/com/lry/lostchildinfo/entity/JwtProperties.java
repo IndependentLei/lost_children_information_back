@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @create : 2022-01-22 13:07
  */
 @Data
-@Configuration
+@Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
     /**

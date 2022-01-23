@@ -1,6 +1,7 @@
 package com.lry.lostchildinfo.exception;
 
 import com.lry.lostchildinfo.common.Result;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,4 +49,5 @@ public class ExceptionHandle {
         log.error(e.getMessage());
         return Result.error(e.getMessage());
     }
+
 }
