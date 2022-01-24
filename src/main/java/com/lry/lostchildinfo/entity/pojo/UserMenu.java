@@ -1,6 +1,7 @@
 package com.lry.lostchildinfo.entity.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -18,9 +19,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_admin_menu")
-@ApiModel(value = "AdminMenu对象", description = "管理员表和菜单表关联(一对多)")
-public class AdminMenu implements Serializable {
+@TableName("sys_user_menu")
+@ApiModel(value = "UserMenu对象", description = "用户表和菜单表关联(一对多)")
+public class UserMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +32,11 @@ public class AdminMenu implements Serializable {
     @ApiModelProperty("菜单id")
     @TableField("menu_id")
     private Long menuId;
+
+    @ApiModelProperty("是否删除")
+    @TableField("deleted")
+    @TableLogic
+    private String deleted;
 
 
 }

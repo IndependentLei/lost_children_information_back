@@ -1,6 +1,6 @@
 package com.lry.lostchildinfo.service;
 
-import com.lry.lostchildinfo.entity.pojo.AdminMenu;
+import com.lry.lostchildinfo.entity.pojo.UserMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author jdl
  * @since 2022-01-21
  */
-public interface AdminMenuService extends IService<AdminMenu> {
+public interface UserMenuService extends IService<UserMenu> {
 
 }

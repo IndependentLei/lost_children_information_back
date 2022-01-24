@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -35,17 +34,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRoleService userRoleService;
     @Resource
     RoleService roleService;
-//    @Resource
-//    BCryptPasswordEncoder pw;
 
 
     @Override
     public LoginUser loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("用户信息为：{}",username);
         log.info("已经进入身份认证");
-        User user = userService.getBaseMapper()
-                        .selectOne(new LambdaQueryWrapper<User>()
-                                .eq(User::getUserCode,username));
+        User user = userService.getUserByName(username);
         if (ObjectUtils.isEmpty(user)){
             log.error("用户不存在");
             throw new UsernameNotFoundException("用户不存在");
@@ -55,19 +50,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw  new ServiceException("用户禁止登录");
         }
 
-        // 用户id关联角色id
+
+        return new LoginUser(username,user.getUserPwd(), AuthorityUtils.commaSeparatedStringToAuthorityList(getAuthority(user.getUserId())));
+    }
+
+    /**
+     * 根据用户id获得权限
+     * @param userId
+     * @return
+     */
+    public String getAuthority(Long userId){
 
         UserRole userRole = userRoleService.getBaseMapper()
                 .selectOne(new LambdaQueryWrapper<UserRole>()
-                        .eq(UserRole::getUserId,user.getUserId()));
+                        .eq(UserRole::getUserId,userId));
 
 
         // 获取角色名
-//        Role role = roleService.getBaseMapper()
-//                .selectOne(new LambdaQueryWrapper<Role>()
-//                        .eq(Role::getRoleId,userRole.getRoleId()));
-//        AuthorityUtils.commaSeparatedStringToAuthorityList(role.getRoleName())
-
-        return new LoginUser(username,user.getUserPwd(), null);
+        Role role = roleService.getBaseMapper()
+                .selectOne(new LambdaQueryWrapper<Role>()
+                        .eq(Role::getRoleId,userRole.getRoleId()));
+        return role.getRoleName();
     }
 }

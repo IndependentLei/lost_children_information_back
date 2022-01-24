@@ -1,9 +1,9 @@
 package com.lry.lostchildinfo.service.serviceImpl;
 
-import com.lry.lostchildinfo.entity.pojo.AdminMenu;
-import com.lry.lostchildinfo.mapper.AdminMenuMapper;
-import com.lry.lostchildinfo.service.AdminMenuService;
+import com.lry.lostchildinfo.entity.pojo.UserMenu;
+import com.lry.lostchildinfo.mapper.UserMenuMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lry.lostchildinfo.service.UserMenuService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-01-21
  */
 @Service
-public class AdminMenuServiceImpl extends ServiceImpl<AdminMenuMapper, AdminMenu> implements AdminMenuService {
+public class UserMenuServiceImpl extends ServiceImpl<UserMenuMapper, UserMenu> implements UserMenuService {
 
 }

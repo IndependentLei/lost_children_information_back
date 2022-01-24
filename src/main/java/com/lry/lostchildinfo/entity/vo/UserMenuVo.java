@@ -17,9 +17,9 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@TableName("sys_admin_menu")
-@ApiModel(value = "admin_menu对象", description = "管理员管理菜单表")
-public class AdminMenuVo implements Serializable {
+@TableName("sys_user_menu")
+@ApiModel(value = "user_menu对象", description = "人员管理菜单表")
+public class UserMenuVo implements Serializable {
 
     @ApiModelProperty("用户id")
     private Long userId;

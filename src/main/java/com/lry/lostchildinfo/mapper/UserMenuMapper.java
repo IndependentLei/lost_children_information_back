@@ -1,6 +1,6 @@
 package com.lry.lostchildinfo.mapper;
 
-import com.lry.lostchildinfo.entity.pojo.AdminMenu;
+import com.lry.lostchildinfo.entity.pojo.UserMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface AdminMenuMapper extends BaseMapper<AdminMenu> {
+public interface UserMenuMapper extends BaseMapper<UserMenu> {
 
 }

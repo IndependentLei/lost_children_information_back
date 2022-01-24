@@ -36,6 +36,10 @@ public class Slideshow implements Serializable {
     @TableField("pic")
     private String pic;
 
+    @ApiModelProperty("内容")
+    @TableField("context")
+    private String context;
+
     @ApiModelProperty("创建时间")
     @TableField("create_time")
     private LocalDateTime createTime;

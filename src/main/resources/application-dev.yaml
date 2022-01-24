@@ -3,10 +3,6 @@ server:
 
 # 数据库配置
 spring:
-  security:
-    user:
-      name: user
-      password: 111111
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
   datasource:
@@ -54,6 +50,9 @@ spring:
       #设置访问druid监控页的账号和密码,默认没有
       #spring.datasource.druid.stat-view-servlet.login-username=admin
       #spring.datasource.druid.stat-view-servlet.login-password=admin
+      stat-view-servlet:
+        login-password: admin
+        login-username: admin
 
   # redis
   redis:
@@ -85,7 +84,7 @@ mybatis-plus:
 #JWT
 jwt:
   prefix: bearer  # 请求前缀
-  header: Authorization   # 请求头
+  header: Authentication   # 请求头
   secret: whoareyou  # 盐值
   expire: 3600000 # 过期时间
 

@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/lostchildinfo/admin-menu")
-public class AdminMenuController {
+public class UserMenuController {
 
 }

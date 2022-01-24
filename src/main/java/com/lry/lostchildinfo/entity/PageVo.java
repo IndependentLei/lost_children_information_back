@@ -42,5 +42,16 @@ public class PageVo implements Serializable {
      */
 
     private List<?> list = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("PageVo{");
+        sb.append("current=").append(current);
+        sb.append(", size=").append(size);
+        sb.append(", total=").append(total);
+        sb.append(", list=").append(list);
+        sb.append('}');
+        return sb.toString();
+    }
 }
 

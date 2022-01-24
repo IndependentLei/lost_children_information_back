@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Slideshow implements Serializable {
+public class SlideshowPo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,6 +28,9 @@ public class Slideshow implements Serializable {
 
     @ApiModelProperty("图片地址")
     private String pic;
+
+    @ApiModelProperty("内容")
+    private String context;
 
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;

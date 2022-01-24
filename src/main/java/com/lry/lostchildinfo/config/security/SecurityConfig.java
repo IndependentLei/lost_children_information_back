@@ -1,10 +1,7 @@
 package com.lry.lostchildinfo.config.security;
 
 import com.lry.lostchildinfo.config.security.filter.JwtAuthenticationTokenFilter;
-import com.lry.lostchildinfo.config.security.handle.AccessDeniedHandlerImpl;
-import com.lry.lostchildinfo.config.security.handle.AuthenticationEntryPointHandler;
-import com.lry.lostchildinfo.config.security.handle.LoginFailureHandle;
-import com.lry.lostchildinfo.config.security.handle.LoginSuccessHandle;
+import com.lry.lostchildinfo.config.security.handle.*;
 import com.lry.lostchildinfo.config.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     LoginSuccessHandle loginSuccessHandle;
 
+    // 退出成功管理器
+    LogoutSuccessHandlerImpl logoutSuccessHandler;
+
     //jwt过滤器,重写过滤器
     @Bean
     JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() throws Exception {
@@ -79,6 +79,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .formLogin()
                 .successHandler(loginSuccessHandle)
                 .failureHandler(loginFailureHandle)
+        // 退出成功处理器配置
+        .and()
+                .logout()
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .logoutUrl("/logOut")
+                .logoutSuccessUrl("/logOut")
         //禁用session
         .and()
                 .sessionManagement()
@@ -98,8 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 配置自定义的过滤器
         .and()
-        .addFilter(jwtAuthenticationTokenFilter())
-        ;
+        .addFilter(jwtAuthenticationTokenFilter());
     }
 
 //    // 将重写的UserDetailsServiceImpl注入到管理器里面

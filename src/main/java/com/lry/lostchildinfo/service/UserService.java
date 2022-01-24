@@ -1,5 +1,8 @@
 package com.lry.lostchildinfo.service;
 
+import com.lry.lostchildinfo.common.Result;
+import com.lry.lostchildinfo.entity.po.AdminPo;
+import com.lry.lostchildinfo.entity.po.UserPo;
 import com.lry.lostchildinfo.entity.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    User getUserByName(String username);
+
+    Result selectList(UserPo userPo);
 }

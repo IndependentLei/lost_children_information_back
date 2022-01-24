@@ -1,6 +1,7 @@
 package com.lry.lostchildinfo.entity.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -31,6 +32,11 @@ public class UserRole implements Serializable {
     @ApiModelProperty("角色id")
     @TableField("role_id")
     private Long roleId;
+
+    @ApiModelProperty("是否删除")
+    @TableField("deleted")
+    @TableLogic
+    private String deleted;
 
 
 }

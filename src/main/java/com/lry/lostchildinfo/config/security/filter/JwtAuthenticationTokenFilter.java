@@ -1,6 +1,9 @@
 package com.lry.lostchildinfo.config.security.filter;
 
+import com.lry.lostchildinfo.config.security.service.UserDetailsServiceImpl;
 import com.lry.lostchildinfo.entity.JwtProperties;
+import com.lry.lostchildinfo.entity.pojo.User;
+import com.lry.lostchildinfo.service.UserService;
 import com.lry.lostchildinfo.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -8,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -35,15 +39,22 @@ public class JwtAuthenticationTokenFilter extends BasicAuthenticationFilter {
     @Autowired
     JwtProperties jwtProperties;
 
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    UserService userService;
+
     public JwtAuthenticationTokenFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        logger.info("拦截请求，解析token");
+
         //TODO...校验token
         String token = request.getHeader(jwtProperties.getHeader());
+        logger.info("拦截请求，解析token--------------->{}"+token);
         if (StringUtils.isBlank(token)){
             filterChain.doFilter(request,response);
             return;
@@ -64,8 +75,10 @@ public class JwtAuthenticationTokenFilter extends BasicAuthenticationFilter {
         // 得到用户主体
         String username = claims.getSubject();
 
+        User user = userService.getUserByName(username);
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                = new UsernamePasswordAuthenticationToken(username,null,null);
+                = new UsernamePasswordAuthenticationToken(username,null, AuthorityUtils.commaSeparatedStringToAuthorityList(userDetailsService.getAuthority(user.getUserId())));
 
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         filterChain.doFilter(request,response);
