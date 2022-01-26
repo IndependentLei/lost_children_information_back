@@ -1,10 +1,8 @@
 package com.lry.lostchildinfo.entity.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
@@ -34,14 +32,16 @@ public class Slideshow implements Serializable {
 
     @ApiModelProperty("图片地址")
     @TableField("pic")
+    @Excel(name = "图片地址")
     private String pic;
 
     @ApiModelProperty("内容")
     @TableField("context")
+    @Excel(name = "内容")
     private String context;
 
     @ApiModelProperty("创建时间")
-    @TableField("create_time")
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty("创建人id")
@@ -57,21 +57,20 @@ public class Slideshow implements Serializable {
     private Long updateId;
 
     @ApiModelProperty("更新人")
-    @TableField("update_code")
+    @TableField(value = "update_code")
     private String updateCode;
 
-    @ApiModelProperty("datetime")
-    @TableField("update_time")
-    private Integer updateTime;
+    @ApiModelProperty("更新时间")
+    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
     @ApiModelProperty("是否在轮播中(0在轮播中,1不在轮播中)")
     @TableField("state")
+    @Excel(name = "是否轮播(0在轮播,1不轮播)")
     private String state;
 
     @ApiModelProperty("是否已删除(0未删除,1已删除)")
     @TableField("deleted")
     @TableLogic
     private String deleted;
-
-
 }

@@ -6,4 +6,7 @@ package com.lry.lostchildinfo.annotation;
 public @interface OperationLog {
     // 是否插入数据库
     boolean value() default true;
+
+    // 描述
+    String describe();
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,6 +86,12 @@ class LostChildInfoApplicationTests {
     public void test(){
         String name = bCryptPasswordEncoder.encode("111111");
         System.out.println(name);
+    }
+
+    @Test
+    public void test1(){
+        String date = new DateTime().toString("/yyyy/mm/dd");
+        System.out.println(date);
     }
 
 }

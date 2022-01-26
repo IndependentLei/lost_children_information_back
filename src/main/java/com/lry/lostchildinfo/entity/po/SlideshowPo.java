@@ -47,8 +47,8 @@ public class SlideshowPo implements Serializable {
     @ApiModelProperty("更新人")
     private String updateCode;
 
-    @ApiModelProperty("datetime")
-    private Integer updateTime;
+    @ApiModelProperty("更新时间")
+    private LocalDateTime updateTime;
 
     @ApiModelProperty("是否在轮播中(0在轮播中,1不在轮播中)")
     private String state;

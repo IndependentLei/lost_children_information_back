@@ -88,4 +88,22 @@ jwt:
   secret: whoareyou  # 盐值
   expire: 3600000 # 过期时间
 
+#  FTP.ADDRESS=file.7b114.xyz
+#  FTP.PORT=21
+#  FTP.USERNAME=ftpuser
+#  FTP.PASSWORD=ftpuser
+#  FTP.BasePATH=/usr/local/my_project/first_demo/image/blog_avater
+#  # 访问图片的根路径
+#  IMAGE.BASE.URL=https://file.7b114.xyz/blog_avater
+
+# ftp文件上传配置
+ftp:
+  address: file.7b114.xyz # 路径
+  port: 21 # 端口
+  username: ftpuser # linux的用户名
+  password: ftpuser # linux的密码
+  basePath: /usr/local/my_project/first_demo/image/blog_avater #上传路径
+  imageBaseUrl: https://file.7b114.xyz/blog_avater # 图片访问根路径
+
+
 

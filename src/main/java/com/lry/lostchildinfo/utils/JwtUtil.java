@@ -22,7 +22,7 @@ public class JwtUtil {
     @Autowired
     JwtProperties jwtProperties;
 
-    final Long Expire = 3600000L;
+    final Long Expire = 3600000L*24;
     final String secret = "whoareyou";
 
     /**

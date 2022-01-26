@@ -69,7 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/lostchildinfo/user/*",
 //            "/test",
             "/logout",
-            "/favicon.ico"
+            "/favicon.ico",
+            "/common/uploadPic"
     };
     @Override
     protected void configure(HttpSecurity http) throws Exception {

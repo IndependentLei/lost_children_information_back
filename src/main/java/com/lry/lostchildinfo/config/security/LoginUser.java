@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  * @author : jdl
- * @description : 登录用户身份权限
+ * @description : 登录用户实体
  * @ClassName : LoginUser
  * @create : 2022-01-22 22:32
  */
@@ -20,6 +20,7 @@ public class LoginUser implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+    private Long userId;
     private String password;
     private final String username;
     private final Collection<? extends GrantedAuthority> authorities;
@@ -32,12 +33,12 @@ public class LoginUser implements UserDetails {
     /**
      * Calls the more complex constructor with all boolean arguments set to {@code true}.
      */
-    public LoginUser(String username, String password,
+    public LoginUser(Long userId,String username, String password,
                 Collection<? extends GrantedAuthority> authorities) {
-        this(username, password, true, true, true, true, authorities);
+        this(userId,username, password, true, true, true, true, authorities);
     }
 
-    public LoginUser(String username, String password, boolean enabled,
+    public LoginUser(Long userId,String username, String password, boolean enabled,
                 boolean accountNonExpired, boolean credentialsNonExpired,
                 boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
 
@@ -46,6 +47,7 @@ public class LoginUser implements UserDetails {
                     "Cannot pass null or empty values to constructor");
         }
 
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
@@ -55,6 +57,13 @@ public class LoginUser implements UserDetails {
         this.authorities = authorities;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -51,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
 
-        return new LoginUser(username,user.getUserPwd(), AuthorityUtils.commaSeparatedStringToAuthorityList(getAuthority(user.getUserId())));
+        return new LoginUser(user.getUserId(),username,user.getUserPwd(), AuthorityUtils.commaSeparatedStringToAuthorityList(getAuthority(user.getUserId())));
     }
 
     /**

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author : jdl
@@ -32,9 +33,18 @@ public class SlideshowServiceImpl extends ServiceImpl<SlideshowMapper, Slideshow
         System.out.println(slideshowPo.toString());
         IPage<Slideshow> page =  new Page<>(slideshowPo.getStartPage(),slideshowPo.getPageSize());
         IPage<Slideshow> pageList = slideshowMapper.selectPage(page,new LambdaQueryWrapper<Slideshow>()
-                .like(StringUtils.isNotBlank(slideshowPo.getContext()),Slideshow::getContext,slideshowPo.getContext())
-                .eq(slideshowPo.getState()!=null,Slideshow::getState,slideshowPo.getState()));
+                .like(StringUtils.isNotBlank(slideshowPo.getContext())
+                        ,Slideshow::getContext
+                        ,slideshowPo.getContext())
+                .eq(slideshowPo.getState()!=null
+                        ,Slideshow::getState
+                        ,slideshowPo.getState())
+                .orderByDesc(Slideshow::getCreateTime));
 
-        return new PageVo(pageList.getCurrent(),pageList.getSize(),pageList.getTotal(),pageList.getRecords());
+        return new PageVo(pageList.getCurrent()
+                ,pageList.getSize()
+                ,pageList.getTotal()
+                ,pageList.getRecords());
     }
+
 }

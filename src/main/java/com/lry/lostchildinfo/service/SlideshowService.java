@@ -5,6 +5,9 @@ import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.SlideshowPo;
 import com.lry.lostchildinfo.entity.pojo.Slideshow;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +18,5 @@ import com.lry.lostchildinfo.entity.pojo.Slideshow;
  */
 public interface SlideshowService extends IService<Slideshow> {
     PageVo listByPage(SlideshowPo slideshowPo);
+
 }
