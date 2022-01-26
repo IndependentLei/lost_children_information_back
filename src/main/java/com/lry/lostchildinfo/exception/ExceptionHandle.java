@@ -35,7 +35,6 @@ public class ExceptionHandle {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result exceptionHandler(MethodArgumentNotValidException e) {
-        log.info("jinliale");
         log.error(e.getMessage());
         return Result.error(e.getMessage());
     }
@@ -46,7 +45,7 @@ public class ExceptionHandle {
      */
     @ExceptionHandler(ServiceException.class)
     public Result serviceException(ServiceException e){
-        log.error(e.getMessage());
+        log.error("-------qqq"+e.getMessage());
         return Result.error(e.getMessage());
     }
 

@@ -13,25 +13,19 @@ public enum  UserState {
     banned(1,"禁言"),
     disabled(2,"禁止登录")
     ;
-    private Integer type;
-    private String info;
+    private final Integer type;
+    private final String info;
 
-    UserState(int type, String info) {
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
+    UserState(Integer type, String info) {
         this.type = type;
+        this.info = info;
+    }
+    public int getType() {
+        return this.type;
     }
 
     public String getInfo() {
-        return info;
+        return this.info;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
 }

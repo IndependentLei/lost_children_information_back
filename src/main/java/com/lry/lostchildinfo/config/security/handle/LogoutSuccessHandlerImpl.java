@@ -1,6 +1,9 @@
 package com.lry.lostchildinfo.config.security.handle;
 
 import com.alibaba.fastjson.JSON;
+import com.lry.lostchildinfo.entity.JwtProperties;
+import com.lry.lostchildinfo.utils.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -22,9 +25,14 @@ import java.util.Map;
  */
 @Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
+    @Autowired
+    JwtProperties jwtProperties;
+    @Autowired
+    RedisUtil redisUtil;
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+        if (redisUtil.hasKey(jwtProperties.getHeader()))
+            redisUtil.del(jwtProperties.getHeader());
         if(authentication != null){
             new SecurityContextLogoutHandler().logout(request,response,authentication);
         }

@@ -1,6 +1,4 @@
-package com.lry.lostchildinfo.entity.enumutil;
-
-import lombok.Data;
+package com.lry.lostchildinfo.entity.enums;
 
 /**
  * @author : jdl
@@ -10,8 +8,8 @@ import lombok.Data;
  */
 public enum SlideshowEnum {
 
-    ShufflingIn(0,"轮播中"),
-    ShufflingOut(0,"不在轮播中");
+    ShufflingIn(0,"轮播"),
+    ShufflingOut(1,"不轮播");
 
     private Integer type;
 

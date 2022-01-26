@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +48,7 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
+    @PreAuthorize("hasRole('admin')")
     @PostMapping("list")
     public Result list(@RequestBody SlideshowPo slideshowPo){
         if(slideshowPo.getStartPage() == null)
@@ -65,6 +67,7 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
+    @PreAuthorize("hasRole('test')")
     @PostMapping("add")
     public Result add(@RequestBody SlideshowPo slideshowPo){
         System.out.println(slideshowPo.getContext());
@@ -102,6 +105,7 @@ public class SlideshowController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('admin')")
     @GetMapping("{id}")
     public Result getSlideshowById(@PathVariable("id") Long id){
         if (id > 0){
@@ -120,6 +124,7 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
+    @PreAuthorize("hasAuthority('test')")
     @PostMapping("update")
     public Result update(@RequestBody SlideshowPo slideshowPo){
         if (StringUtils.isNotBlank(slideshowPo.getContext()) && StringUtils.isNotBlank(slideshowPo.getPic()) && slideshowPo.getState() != null){
@@ -147,6 +152,9 @@ public class SlideshowController {
             params.setHeadRows(1); // 设置标题头为第一行
             try {
                 List<Slideshow> slideshows = ExcelImportUtil.importExcel(file.getInputStream(), Slideshow.class, params);
+                if(ObjectUtil.isEmpty(slideshows)){
+                    return Result.error("禁止导入空文件");
+                }
                 slideshowService.saveBatch(slideshows);
                 if (slideshowService.saveBatch(slideshows)) {
                     return Result.success("成功导入" + slideshows.size() + "数据");

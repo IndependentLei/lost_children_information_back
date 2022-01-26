@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
+import com.lry.lostchildinfo.utils.RedisUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import java.util.List;
 class LostChildInfoApplicationTests {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Test
     void contextLoads() {
@@ -92,6 +97,32 @@ class LostChildInfoApplicationTests {
     public void test1(){
         String date = new DateTime().toString("/yyyy/mm/dd");
         System.out.println(date);
+    }
+
+    @Test
+    public void test2(){
+        if (redisUtil.set("111","1111")){
+            System.out.println("存入成功");
+        }else {
+            System.out.println("失败!");
+        }
+
+        if (redisUtil.hasKey("111")) {
+
+            System.out.println(redisUtil.get("111"));
+        }
+
+        if (redisUtil.hasKey("PermissionsCache:1")){
+            System.out.println(redisUtil.hasKey("PermissionsCache:1"));
+            System.out.println(redisUtil.get("PermissionsCache:1"));
+        }
+        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MzIwODIxMCwiZXhwIjoxNjQzMjk0NjEwfQ.kjtQXdtNma4q207iNP5kcp6Jl1f_6-jwhwsgsq_cAZs";
+        System.out.println("Bearer ".length());
+        token = StringUtils.substring(token, "Bearer ".length());
+        System.out.println(token);
+
+        System.out.println(StringUtils.startsWith("Bearer ",token));
+        System.out.println(StringUtils.startsWith(token,"Bearer "));
     }
 
 }

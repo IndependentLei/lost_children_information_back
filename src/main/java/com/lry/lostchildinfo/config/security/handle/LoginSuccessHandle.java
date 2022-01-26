@@ -3,6 +3,7 @@ package com.lry.lostchildinfo.config.security.handle;
 import com.alibaba.fastjson.JSON;
 import com.lry.lostchildinfo.entity.JwtProperties;
 import com.lry.lostchildinfo.utils.JwtUtil;
+import com.lry.lostchildinfo.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -33,21 +34,26 @@ public class LoginSuccessHandle implements AuthenticationSuccessHandler {
     @Autowired
     JwtUtil jwtUtil;
 
+    @Autowired
+    RedisUtil redisUtil;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("登录成功");
         log.info(jwtProperties.getHeader());
         log.info(jwtProperties.getPrefix());
         log.info(jwtProperties.getSecret());
-        log.info(""+jwtProperties.getExpire());
+        log.info("过期时间{}",jwtProperties.getExpire());
         response.setContentType("application/json;charset=utf-8");
         PrintWriter writer = response.getWriter();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("code",HttpServletResponse.SC_OK);
         map.put("msg","登录成功");
         //生成token
-        map.put(jwtProperties.getHeader(), jwtUtil.createJwt(authentication.getName()));
-
+        String token = jwtUtil.createJwt(authentication.getName());
+        map.put(jwtProperties.getHeader(),jwtProperties.tokenStart()+token);
+        // 登录成功生成把token存入redis，过期时间为一天
+        redisUtil.set(jwtProperties.getHeader(),jwtProperties.tokenStart()+token,jwtProperties.getExpire()/1000 );
         writer.write(JSON.toJSONString(map));
         writer.flush();
         writer.close();

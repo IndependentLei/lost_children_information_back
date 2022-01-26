@@ -83,10 +83,10 @@ mybatis-plus:
 
 #JWT
 jwt:
-  prefix: bearer  # 请求前缀
+  prefix: Bearer  # 请求前缀
   header: Authentication   # 请求头
   secret: whoareyou  # 盐值
-  expire: 3600000 # 过期时间
+  expire: 86400000 # 过期时间(一天)
 
 #  FTP.ADDRESS=file.7b114.xyz
 #  FTP.PORT=21

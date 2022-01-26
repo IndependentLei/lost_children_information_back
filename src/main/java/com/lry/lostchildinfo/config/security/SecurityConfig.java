@@ -65,12 +65,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 不需要认证的白名单
     private static final String[] URL_WHITELIST ={
             "/login",
-            "/lostchildinfo/admin/*",
-            "/lostchildinfo/user/*",
-//            "/test",
             "/logout",
+            // 放心swagger
+            "/swagger-ui.html",
+            // druid页面
+            "/druid/index.html",
             "/favicon.ico",
-            "/common/uploadPic"
+            "/common/*",
+            // 放行静态文件
+            "**.css","**.js","**.html","**.jpg"
     };
     @Override
     protected void configure(HttpSecurity http) throws Exception {
