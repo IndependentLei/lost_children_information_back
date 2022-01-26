@@ -45,7 +45,7 @@ public class RolePo implements Serializable {
     private String createName;
 
     @ApiModelProperty("更新时间")
-    private Long updateTime;
+    private LocalDateTime updateTime;
 
     @ApiModelProperty("更新人")
     private String updateName;

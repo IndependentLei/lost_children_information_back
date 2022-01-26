@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -47,7 +49,11 @@ public class SonComment implements Serializable {
     @TableField("replay_id")
     private Long replayId;
 
-    @ApiModelProperty("被回复人")
+    @ApiModelProperty("回复时间")
+    @TableField("create_time")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty("回复内容")
     @TableField("replay_context")
     private String replayContext;
 

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -36,6 +37,9 @@ public class SonCommentPo implements Serializable {
 
     @ApiModelProperty("被回复人的id")
     private Long replayId;
+
+    @ApiModelProperty("回复时间")
+    private LocalDateTime createTime;
 
     @ApiModelProperty("回复内容")
     private String replayContext;
