@@ -1,10 +1,7 @@
 package com.lry.lostchildinfo.entity.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
@@ -69,7 +66,7 @@ public class User implements Serializable {
     private Long createId;
 
     @ApiModelProperty("创建时间")
-    @TableField("create_time")
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty("创建人")
@@ -81,7 +78,7 @@ public class User implements Serializable {
     private LocalDateTime updateTime;
 
     @ApiModelProperty("修改人")
-    @TableField("update_name")
+    @TableField(value = "update_name",fill = FieldFill.INSERT_UPDATE)
     private String updateName;
 
     @ApiModelProperty("修改人id")

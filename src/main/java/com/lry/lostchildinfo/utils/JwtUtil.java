@@ -22,24 +22,20 @@ public class JwtUtil {
     @Autowired
     JwtProperties jwtProperties;
 
-    final Long Expire = 3600000L*24;
-    final String secret = "whoareyou";
-
     /**
      * 生成token
      * @param username
      * @return
      */
     public  String createJwt(String username){
-//        System.out.println(jwtProperties.toString());
         Date now = new Date();
-        Date expireDate = new Date(now.getTime()+ Expire);
+        Date expireDate = new Date(now.getTime()+ jwtProperties.getExpire());
 
         return  Jwts.builder()
                         .setSubject(username)
                         .setIssuedAt(now)
                         .setExpiration(expireDate)
-                        .signWith(SignatureAlgorithm.HS256 , secret )
+                        .signWith(SignatureAlgorithm.HS256 , jwtProperties.getSecret() )
                         .compact();
     }
 

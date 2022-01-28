@@ -65,20 +65,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 不需要认证的白名单
     private static final String[] URL_WHITELIST ={
             "/login",
-            "/logout",
-            // 放心swagger
+            "/logout/*",
+            // swagger
             "/swagger-ui.html",
             // druid页面
             "/druid/index.html",
             "/favicon.ico",
             "/common/*",
             // 放行静态文件
-            "**.css","**.js","**.html","**.jpg"
     };
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().and().csrf().disable()
+        http
+                .cors()
+        .and()
+                .csrf()
+                .disable()
         //登录配置
         .formLogin()
                 .successHandler(loginSuccessHandle)
@@ -86,9 +89,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 退出成功处理器配置
         .and()
                 .logout()
-                .logoutSuccessHandler(logoutSuccessHandler)
-                .logoutUrl("/logOut")
-                .logoutSuccessUrl("/logOut")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/logout/success")
+//                .logoutSuccessHandler(logoutSuccessHandler)
+                .deleteCookies("JSESSIONID")
         //禁用session
         .and()
                 .sessionManagement()

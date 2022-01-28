@@ -6,25 +6,25 @@ import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.SlideshowPo;
-import com.lry.lostchildinfo.entity.po.UserPo;
 import com.lry.lostchildinfo.entity.pojo.Slideshow;
 import com.lry.lostchildinfo.service.SlideshowService;
+import com.lry.lostchildinfo.utils.ExcelUtil;
 import com.lry.lostchildinfo.utils.FileUtil;
 import com.lry.lostchildinfo.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * <p>
@@ -48,7 +48,7 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
-    @PreAuthorize("hasRole('admin')")
+    @OperationLog(describe = "分页查找")
     @PostMapping("list")
     public Result list(@RequestBody SlideshowPo slideshowPo){
         if(slideshowPo.getStartPage() == null)
@@ -67,13 +67,12 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
-    @PreAuthorize("hasRole('test')")
     @PostMapping("add")
     public Result add(@RequestBody SlideshowPo slideshowPo){
-        System.out.println(slideshowPo.getContext());
-        System.out.println(slideshowPo.getPic());
-        System.out.println(slideshowPo.getState());
-        if (StringUtils.isNotBlank(slideshowPo.getContext()) && StringUtils.isNotBlank(slideshowPo.getPic()) && slideshowPo.getState() != null){
+        if (StringUtils.isNotBlank(slideshowPo.getContext())
+                && StringUtils.isNotBlank(slideshowPo.getPic())
+                && slideshowPo.getState() != null
+                && StringUtils.isNotBlank(slideshowPo.getState())){
             Slideshow slideshow = new Slideshow();
             BeanUtil.copyProperties(slideshowPo,slideshow);
             slideshow.setCreateId(SecurityUtil.getCurrentUser().getUserId());
@@ -105,7 +104,6 @@ public class SlideshowController {
      * @param id
      * @return
      */
-    @PreAuthorize("hasAuthority('admin')")
     @GetMapping("{id}")
     public Result getSlideshowById(@PathVariable("id") Long id){
         if (id > 0){
@@ -124,7 +122,6 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
-    @PreAuthorize("hasAuthority('test')")
     @PostMapping("update")
     public Result update(@RequestBody SlideshowPo slideshowPo){
         if (StringUtils.isNotBlank(slideshowPo.getContext()) && StringUtils.isNotBlank(slideshowPo.getPic()) && slideshowPo.getState() != null){
@@ -134,7 +131,6 @@ public class SlideshowController {
             slideshow.setUpdateCode(SecurityUtil.getCurrentUser().getUserCode());
             if (slideshowService.updateById(slideshow))
                 return  Result.success("操作成功");
-            System.out.println(1111);
             return Result.error("操作失败");
         }
         return Result.error("参数出错");
@@ -149,7 +145,8 @@ public class SlideshowController {
     public Result slideshowImport(MultipartFile file){
         if (FileUtil.checkFileName(file,"xls","xlsx")){
             ImportParams params = new ImportParams();
-            params.setHeadRows(1); // 设置标题头为第一行
+            params.setTitleRows(1); // 标题
+            params.setHeadRows(1); // 头
             try {
                 List<Slideshow> slideshows = ExcelImportUtil.importExcel(file.getInputStream(), Slideshow.class, params);
                 if(ObjectUtil.isEmpty(slideshows)){
@@ -169,5 +166,15 @@ public class SlideshowController {
         } else {
             return Result.error("文件类型错误,请重新上传");
         }
+    }
+
+    /**
+     * 导出所有
+     * @return
+     */
+    @GetMapping("export")
+    public void slideshowExport(HttpServletResponse response) throws UnsupportedEncodingException {
+        List<Slideshow> slideshows = slideshowService.list();
+        ExcelUtil.exportExcel(response, Slideshow.class,slideshows,"轮播图管理表");
     }
 }

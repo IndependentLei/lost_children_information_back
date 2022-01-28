@@ -30,7 +30,6 @@ public class SlideshowServiceImpl extends ServiceImpl<SlideshowMapper, Slideshow
 
     @Override
     public PageVo listByPage(SlideshowPo slideshowPo) {
-        System.out.println(slideshowPo.toString());
         IPage<Slideshow> page =  new Page<>(slideshowPo.getStartPage(),slideshowPo.getPageSize());
         IPage<Slideshow> pageList = slideshowMapper.selectPage(page,new LambdaQueryWrapper<Slideshow>()
                 .like(StringUtils.isNotBlank(slideshowPo.getContext())

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
+import com.lry.lostchildinfo.entity.JwtProperties;
 import com.lry.lostchildinfo.utils.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -123,6 +124,16 @@ class LostChildInfoApplicationTests {
 
         System.out.println(StringUtils.startsWith("Bearer ",token));
         System.out.println(StringUtils.startsWith(token,"Bearer "));
+    }
+    @Autowired
+    JwtProperties jwtProperties;
+    @Test
+    public void test3(){
+        System.out.println(jwtProperties.getPrefix());
+        System.out.println(jwtProperties.getExpire());
+        System.out.println(jwtProperties.getHeader());
+        System.out.println(jwtProperties.getSecret());
+        System.out.println(jwtProperties.tokenStart());
     }
 
 }

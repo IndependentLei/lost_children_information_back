@@ -1,10 +1,7 @@
 package com.lry.lostchildinfo.entity.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
@@ -40,6 +37,10 @@ public class Log implements Serializable {
     @TableField("user_code")
     private String userCode;
 
+    @ApiModelProperty("描述")
+    @TableField("description")
+    private String description;
+
     @ApiModelProperty("请求方法")
     @TableField("method_name")
     private String methodName;
@@ -50,7 +51,7 @@ public class Log implements Serializable {
 
     @ApiModelProperty("执行时间")
     @TableField("execution_time")
-    private Integer executionTime;
+    private Long executionTime;
 
     @ApiModelProperty("请求地址")
     @TableField("request_url")
@@ -61,7 +62,7 @@ public class Log implements Serializable {
     private String requestIp;
 
     @ApiModelProperty("创建时间")
-    @TableField("create_time")
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty("是否删除(0为未删除,1未已删除)")
