@@ -64,8 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 不需要认证的白名单
     private static final String[] URL_WHITELIST ={
-            "/login",
-            "/logout/*",
+            "/login", // 登录
+            "/logout/*", // 退出成功
             // swagger
             "/swagger-ui.html",
             // druid页面

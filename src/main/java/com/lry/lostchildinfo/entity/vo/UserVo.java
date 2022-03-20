@@ -73,5 +73,7 @@ public class UserVo implements Serializable {
     @ApiModelProperty("删除状态(0为未删除,1为已删除)")
     private String deleted;
 
+    private char roleType;
+
 
 }

@@ -80,4 +80,6 @@ public class UserPo implements Serializable {
      */
     private Long pageSize;
 
+    private String roleType;
+
 }

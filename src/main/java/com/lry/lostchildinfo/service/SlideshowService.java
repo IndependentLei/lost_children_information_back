@@ -18,5 +18,4 @@ import java.util.Set;
  */
 public interface SlideshowService extends IService<Slideshow> {
     PageVo listByPage(SlideshowPo slideshowPo);
-
 }

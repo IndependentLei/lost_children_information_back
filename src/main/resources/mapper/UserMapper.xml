@@ -21,5 +21,24 @@
         <result column="update_id" property="updateId" />
         <result column="deleted" property="deleted" />
     </resultMap>
+    <select id="listByPage" resultType="com.lry.lostchildinfo.entity.vo.UserVo" parameterType="com.lry.lostchildinfo.entity.po.UserPo">
+        SELECT ss.user_code,ss.age,ss.sex,ss.state,ss.create_time,sr.role_type FROM `sys_user` ss
+        left join `sys_user_role` ssr
+        on ss.user_id = ssr.user_id
+        left join `sys_role` sr
+        on ssr.role_id = sr.role_id
+        <where>
+            <if test="userPo.userCode != '' and userPo.userCode != null">
+                and ss.user_code like concat('%',#{userPo.userCode},'%')
+            </if>
+            <if test="userPo.roleType != '' and userPo.roleType != null">
+                and sr.role_type = #{userPo.roleType}
+            </if>
+            <if test="userPo.state != '' and userPo.state != null">
+                and ss.state = #{userPo.state}
+            </if>
+        </where>
+        order by ss.create_time Desc
+    </select>
 
 </mapper>

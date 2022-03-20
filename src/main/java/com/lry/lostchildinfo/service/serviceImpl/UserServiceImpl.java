@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.service.serviceImpl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,11 +9,17 @@ import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.UserPo;
 import com.lry.lostchildinfo.entity.pojo.User;
+import com.lry.lostchildinfo.entity.vo.UserVo;
 import com.lry.lostchildinfo.mapper.UserMapper;
 import com.lry.lostchildinfo.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -36,13 +43,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result selectList(UserPo userPo) {
-        IPage<User> page = new Page<>(userPo.getStartPage(), userPo.getPageSize());
+        List<UserVo> user = userMapper.listByPage(userPo);
+        List<UserVo> userVOS = new ArrayList<>(10);
 
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>()
-                .eq(StringUtils.isNotBlank(userPo.getUserCode()),User::getUserCode,userPo.getUserCode());
+        int page = userPo.getStartPage() * userPo.getPageSize() > user.size() ? user.size() : (int) (userPo.getStartPage() * userPo.getPageSize());
 
-        IPage<User> list = userMapper.selectPage(page,wrapper);
-        PageVo pageVo = new PageVo(list.getCurrent(),list.getSize(),list.getTotal(),list.getRecords());
+        for (int i = (int) ((userPo.getStartPage()-1)*userPo.getPageSize()); i < page ; i++){
+            userVOS.add(user.get(i));
+        }
+
+        PageVo pageVo = new PageVo(userPo.getStartPage(),userPo.getPageSize(), (long) user.size(),userVOS);
         return Result.success(pageVo);
     }
+
 }

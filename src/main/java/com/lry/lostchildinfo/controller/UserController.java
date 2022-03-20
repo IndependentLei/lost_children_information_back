@@ -4,6 +4,7 @@ package com.lry.lostchildinfo.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.po.AdminPo;
 import com.lry.lostchildinfo.entity.po.UserPo;
@@ -46,9 +47,9 @@ public class UserController {
      * @param userpo
      * @return
      */
-    @GetMapping("list")
-    @ApiOperation(value="管理员实体", notes="分页查找", produces="application/json")
-    public Result list(@Validated @RequestBody UserPo userpo){
+    @PostMapping("list")
+    @OperationLog(describe = "用户分页查询")
+    public Result list(@RequestBody UserPo userpo){
         return userService.selectList(userpo);
     }
 
@@ -57,7 +58,7 @@ public class UserController {
      * @param userPo
      * @return
      */
-    @PostMapping("add")
+    @PostMapping("/add")
     public Result add(@RequestBody UserPo userPo){
         User user = new User();
         BeanUtil.copyProperties(userPo,user);

@@ -14,6 +14,7 @@ import com.lry.lostchildinfo.entity.pojo.Slideshow;
 import com.lry.lostchildinfo.service.SlideshowService;
 import com.lry.lostchildinfo.utils.ExcelUtil;
 import com.lry.lostchildinfo.utils.FileUtil;
+import com.lry.lostchildinfo.utils.RedisUtil;
 import com.lry.lostchildinfo.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,11 +52,11 @@ public class SlideshowController {
     @OperationLog(describe = "分页查找")
     @PostMapping("list")
     public Result list(@RequestBody SlideshowPo slideshowPo){
-        if(slideshowPo.getStartPage() == null)
+        if (slideshowPo.getStartPage() == null)
             slideshowPo.setPageSize(1L);
         if (slideshowPo.getState().equals(""))
             slideshowPo.setState(null);
-        if (slideshowPo.getStartPage() == null || slideshowPo.getPageSize() == null){
+        if (slideshowPo.getStartPage() == null || slideshowPo.getPageSize() == null) {
             return Result.error("参数出错");
         }
         PageVo pageVo = slideshowService.listByPage(slideshowPo);
@@ -68,6 +69,7 @@ public class SlideshowController {
      * @return
      */
     @PostMapping("add")
+    @OperationLog(describe = "添加轮播图")
     public Result add(@RequestBody SlideshowPo slideshowPo){
         if (StringUtils.isNotBlank(slideshowPo.getContext())
                 && StringUtils.isNotBlank(slideshowPo.getPic())
@@ -77,8 +79,9 @@ public class SlideshowController {
             BeanUtil.copyProperties(slideshowPo,slideshow);
             slideshow.setCreateId(SecurityUtil.getCurrentUser().getUserId());
             slideshow.setCreateCode(SecurityUtil.getCurrentUser().getUserCode());
-            if (slideshowService.save(slideshow))
-                return  Result.success("操作成功");
+            if (slideshowService.save(slideshow)) {
+                return Result.success("操作成功");
+            }
             return Result.error("操作失败");
         }
         return Result.error("参数出错");
@@ -89,13 +92,15 @@ public class SlideshowController {
      * @param ids
      * @return
      */
+    @OperationLog(describe = "批量删除")
     @DeleteMapping("/del/{ids}")
     public Result delete(@PathVariable("ids") Long[] ids){
         if (ids.length < 1){
             return Result.error("参数错误");
         }
-        if (slideshowService.removeByIds(Arrays.asList(ids)))
+        if (slideshowService.removeByIds(Arrays.asList(ids))) {
             return Result.success("删除成功");
+        }
         return Result.error("删除失败");
     }
 
@@ -105,6 +110,7 @@ public class SlideshowController {
      * @return
      */
     @GetMapping("{id}")
+    @OperationLog(describe = "获取详细信息")
     public Result getSlideshowById(@PathVariable("id") Long id){
         if (id > 0){
             Slideshow slideshow = slideshowService.getOne(new LambdaQueryWrapper<Slideshow>().eq(Slideshow::getId,id));
@@ -122,6 +128,7 @@ public class SlideshowController {
      * @param slideshowPo
      * @return
      */
+    @OperationLog(describe = "更新轮播图信息")
     @PostMapping("update")
     public Result update(@RequestBody SlideshowPo slideshowPo){
         if (StringUtils.isNotBlank(slideshowPo.getContext()) && StringUtils.isNotBlank(slideshowPo.getPic()) && slideshowPo.getState() != null){
@@ -129,8 +136,9 @@ public class SlideshowController {
             BeanUtil.copyProperties(slideshowPo,slideshow);
             slideshow.setUpdateId((SecurityUtil.getCurrentUser().getUserId()));
             slideshow.setUpdateCode(SecurityUtil.getCurrentUser().getUserCode());
-            if (slideshowService.updateById(slideshow))
-                return  Result.success("操作成功");
+            if (slideshowService.updateById(slideshow)) {
+                return Result.success("操作成功");
+            }
             return Result.error("操作失败");
         }
         return Result.error("参数出错");
@@ -142,6 +150,7 @@ public class SlideshowController {
      * @return
      */
     @PostMapping("import")
+    @OperationLog(describe = "导入轮播图信息")
     public Result slideshowImport(MultipartFile file){
         if (FileUtil.checkFileName(file,"xls","xlsx")){
             ImportParams params = new ImportParams();
@@ -173,6 +182,7 @@ public class SlideshowController {
      * @return
      */
     @GetMapping("export")
+    @OperationLog(describe = "导出轮播图信息")
     public void slideshowExport(HttpServletResponse response) throws UnsupportedEncodingException {
         List<Slideshow> slideshows = slideshowService.list();
         ExcelUtil.exportExcel(response, Slideshow.class,slideshows,"轮播图管理表");
