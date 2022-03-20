@@ -23,15 +23,13 @@ import java.util.Map;
 @Component
 public class LoginFailureHandle implements AuthenticationFailureHandler {
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter writer = response.getWriter();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("code",HttpServletResponse.SC_BAD_REQUEST);
-        map.put("msg","账号或密码错误");
+        map.put("msg",e.getMessage());
         map.put("data", Collections.emptyList());
-//        writer.write("{\"status\":\"403\",\"msg\":\"权限不足，请联系管理员\"}");
         writer.write(JSON.toJSONString(map));
         writer.flush();
         writer.close();

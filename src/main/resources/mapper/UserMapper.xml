@@ -22,7 +22,7 @@
         <result column="deleted" property="deleted" />
     </resultMap>
     <select id="listByPage" resultType="com.lry.lostchildinfo.entity.vo.UserVo" parameterType="com.lry.lostchildinfo.entity.po.UserPo">
-        SELECT ss.user_code,ss.age,ss.sex,ss.state,ss.create_time,sr.role_type FROM `sys_user` ss
+        SELECT ss.user_id,ss.user_pwd,ss.user_code,ss.age,ss.sex,ss.state,ss.create_time,sr.role_type FROM `sys_user` ss
         left join `sys_user_role` ssr
         on ss.user_id = ssr.user_id
         left join `sys_role` sr
@@ -37,7 +37,11 @@
             <if test="userPo.state != '' and userPo.state != null">
                 and ss.state = #{userPo.state}
             </if>
+            and ss.deleted = 0
+            and ssr.deleted = 0
+            and sr.deleted = 0
         </where>
+
         order by ss.create_time Desc
     </select>
 
