@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 系统日志 服务实现类
@@ -44,5 +46,10 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
                 ,pageList.getSize()
                 ,pageList.getTotal()
                 ,pageList.getRecords());
+    }
+
+    @Override
+    public List<Log> allLog() {
+        return logMapper.allLog();
     }
 }

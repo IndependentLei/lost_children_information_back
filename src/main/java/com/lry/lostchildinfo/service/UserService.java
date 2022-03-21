@@ -7,6 +7,8 @@ import com.lry.lostchildinfo.entity.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lry.lostchildinfo.entity.vo.UserVo;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -22,4 +24,6 @@ public interface UserService extends IService<User> {
     Result selectList(UserPo userPo);
 
     UserVo getUserById(Long id);
+
+    List<User> allUser();
 }

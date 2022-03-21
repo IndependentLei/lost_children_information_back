@@ -27,8 +27,7 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter writer = response.getWriter();
         Map<String,Object> map = new HashMap<String,Object>();

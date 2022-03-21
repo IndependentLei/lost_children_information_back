@@ -81,4 +81,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userVo;
     }
 
+    @Override
+    public List<User> allUser() {
+        return userMapper.allUser();
+    }
+
 }

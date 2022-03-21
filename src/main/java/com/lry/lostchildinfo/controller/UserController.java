@@ -15,6 +15,7 @@ import com.lry.lostchildinfo.entity.pojo.UserRole;
 import com.lry.lostchildinfo.entity.vo.UserVo;
 import com.lry.lostchildinfo.service.UserRoleService;
 import com.lry.lostchildinfo.service.UserService;
+import com.lry.lostchildinfo.utils.ExcelUtil;
 import com.lry.lostchildinfo.utils.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -185,6 +190,25 @@ public class UserController {
 
         }
 
+    }
+
+    /**
+     * 导入用户
+     * @param file
+     * @return
+     */
+    @PostMapping("import")
+    @OperationLog(describe = "导入用户")
+    public Result importUser(MultipartFile file){
+        return Result.success();
+    }
+
+    @OperationLog(describe = "导出用户")
+    @GetMapping("export")
+    public void exportUser(HttpServletResponse response){
+        List<User> list = userService.allUser();
+        System.out.println("Arrays.toString(list.toArray()) = " + Arrays.toString(list.toArray()));
+        ExcelUtil.exportExcel(response,User.class,list,"用户表");
     }
 
 }

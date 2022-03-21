@@ -28,7 +28,11 @@ public class LoginFailureHandle implements AuthenticationFailureHandler {
         PrintWriter writer = response.getWriter();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("code",HttpServletResponse.SC_BAD_REQUEST);
-        map.put("msg",e.getMessage());
+        if ("Bad credentials".equals(e.getMessage())){
+            map.put("msg","账号或密码错误");
+        }else {
+            map.put("msg", e.getMessage());
+        }
         map.put("data", Collections.emptyList());
         writer.write(JSON.toJSONString(map));
         writer.flush();

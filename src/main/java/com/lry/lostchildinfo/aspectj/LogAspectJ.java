@@ -85,6 +85,9 @@ public class LogAspectJ {
             HttpServletRequest request = HttpUtil.getHttpServletRequest();
             StringBuffer requestURL = request.getRequestURL(); // 请求路径
             String requestIP = HttpUtil.getIPAddress(request); // 请求Ip
+            if ("0:0:0:0:0:0:0:1".equals(requestIP)){
+                requestIP = "127.0.0.1";
+            }
             // 当前用户
             User user = SecurityUtil.getCurrentUser();
             Log myLog = new Log();

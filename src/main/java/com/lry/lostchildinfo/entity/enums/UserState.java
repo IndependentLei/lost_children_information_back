@@ -1,4 +1,4 @@
-package com.lry.lostchildinfo.common;
+package com.lry.lostchildinfo.entity.enums;
 
 import lombok.Data;
 

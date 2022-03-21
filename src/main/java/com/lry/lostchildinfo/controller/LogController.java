@@ -5,13 +5,17 @@ import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.LogPo;
+import com.lry.lostchildinfo.entity.pojo.Log;
 import com.lry.lostchildinfo.service.LogService;
-import lombok.extern.java.Log;
+import com.lry.lostchildinfo.utils.ExcelUtil;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.naming.spi.ResolveResult;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -23,7 +27,7 @@ import javax.naming.spi.ResolveResult;
  */
 @RestController
 @RequestMapping("/lostchildinfo/log")
-@Log
+@Slf4j
 public class LogController {
 
     @Autowired
@@ -34,8 +38,8 @@ public class LogController {
      * @param log
      * @return
      */
-    @OperationLog(describe = "分页查找")
-    @GetMapping("/list")
+    @OperationLog(describe = "日志分页查找")
+    @PostMapping("/list")
     public Result list(@RequestBody LogPo log){
         PageVo pageVo = logService.listByPage(log);
         return Result.success(pageVo);
@@ -66,9 +70,9 @@ public class LogController {
      * @return
      */
     @OperationLog(describe = "删除日志")
-    @PostMapping("/delete/{id}")
-    public Result delete(@PathVariable("id") Long id){
-        boolean b = logService.removeById(id);
+    @DeleteMapping("{ids}")
+    public Result delete(@PathVariable("ids") Long ...ids){
+        boolean b = logService.removeByIds(Arrays.asList(ids));
         if (b){
             return Result.success("删除成功");
         }else {
@@ -92,10 +96,9 @@ public class LogController {
      * @return
      */
     @OperationLog(describe = "导出日志")
-    @GetMapping("exportLog")
-    public Result exportLog(){
-        return Result.success("导出成功");
+    @GetMapping("/export")
+    public void exportLog(HttpServletResponse response){
+        List<Log> logs = logService.allLog();
+        ExcelUtil.exportExcel(response,Log.class,logs,"日志表");
     }
-
-
 }

@@ -44,5 +44,8 @@
 
         order by ss.create_time Desc
     </select>
+    <select id="allUser" resultType="com.lry.lostchildinfo.entity.pojo.User">
+        select * from `sys_user`
+    </select>
 
 </mapper>

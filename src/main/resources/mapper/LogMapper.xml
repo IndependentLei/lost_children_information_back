@@ -15,5 +15,8 @@
         <result column="create_time" property="createTime" />
         <result column="deleted" property="deleted" />
     </resultMap>
+    <select id="allLog" resultType="com.lry.lostchildinfo.entity.pojo.Log">
+        select * from `sys_log`
+    </select>
 
 </mapper>

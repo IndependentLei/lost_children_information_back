@@ -24,4 +24,6 @@ import java.util.List;
 public interface UserMapper extends BaseMapper<User> {
 
     List<UserVo> listByPage(@Param("userPo") UserPo userPo);
+
+    List<User> allUser();
 }

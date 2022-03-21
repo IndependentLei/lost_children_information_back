@@ -1,7 +1,8 @@
 package com.lry.lostchildinfo.config.security.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lry.lostchildinfo.common.UserState;
+import com.lry.lostchildinfo.entity.enums.RoleType;
+import com.lry.lostchildinfo.entity.enums.UserState;
 import com.lry.lostchildinfo.config.security.LoginUser;
 import com.lry.lostchildinfo.entity.pojo.Role;
 import com.lry.lostchildinfo.entity.pojo.User;
@@ -11,7 +12,6 @@ import com.lry.lostchildinfo.service.RoleService;
 import com.lry.lostchildinfo.service.UserRoleService;
 import com.lry.lostchildinfo.service.UserService;
 import com.lry.lostchildinfo.utils.RedisUtil;
-import com.lry.lostchildinfo.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -52,6 +52,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.error("禁止登录");
             throw new ServiceException("用户禁止登录");
         }
+        Role role = getUserRoleById(user.getUserId());
+        if ( role.getRoleType().equals(String.valueOf(RoleType.CUSTOMER.getType()))){
+            log.debug("客户不能登录后台");
+            throw new ServiceException("您没有权限,请联系管理员");
+        }
 
         return new LoginUser(user.getUserId(),username,user.getUserPwd(), AuthorityUtils.commaSeparatedStringToAuthorityList(getAuthority(user.getUserId())));
     }
@@ -63,25 +68,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     public String getAuthority(Long userId){
         String authority = "";
-        User user = userService.getById(userId);
         // 权限缓存
-        if (redisUtil.hasKey(PERMISSIONS_CACHE+user.getUserId()))
-            authority =(String) redisUtil.get(PERMISSIONS_CACHE+user.getUserId());
+        if (redisUtil.hasKey(PERMISSIONS_CACHE+userId))
+            authority =(String) redisUtil.get(PERMISSIONS_CACHE+userId);
         else {
-            UserRole userRole = userRoleService.getBaseMapper()
-                    .selectOne(new LambdaQueryWrapper<UserRole>()
-                            .eq(UserRole::getUserId,userId));
-
-
-            // 获取角色名
-            Role role = roleService.getBaseMapper()
-                    .selectOne(new LambdaQueryWrapper<Role>()
-                            .eq(Role::getRoleId,userRole.getRoleId()));
+            Role role = getUserRoleById(userId);
             authority = role.getRoleName();
             // 缓存时间为三个小时
-            redisUtil.set(PERMISSIONS_CACHE+user.getUserId(),authority,3*60*60);
+            redisUtil.set(PERMISSIONS_CACHE+userId,authority,3*60*60);
         }
 
         return authority;
+    }
+
+    private Role getUserRoleById(Long userId){
+        UserRole userRole = userRoleService.getBaseMapper()
+                .selectOne(new LambdaQueryWrapper<UserRole>()
+                        .eq(UserRole::getUserId,userId));
+
+
+        // 获取角色名
+        Role role = roleService.getBaseMapper()
+                .selectOne(new LambdaQueryWrapper<Role>()
+                        .eq(Role::getRoleId,userRole.getRoleId()));
+        return role;
     }
 }
