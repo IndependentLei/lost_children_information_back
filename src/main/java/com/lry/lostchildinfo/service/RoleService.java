@@ -1,5 +1,7 @@
 package com.lry.lostchildinfo.service;
 
+import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.po.RolePo;
 import com.lry.lostchildinfo.entity.pojo.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
+    PageVo listByPage(RolePo rolePo);
+
+    boolean delByIds(Long ...roleIds);
 }

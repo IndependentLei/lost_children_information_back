@@ -1,9 +1,24 @@
 package com.lry.lostchildinfo.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.lry.lostchildinfo.annotation.OperationLog;
+import com.lry.lostchildinfo.common.Result;
+import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.po.RolePo;
+import com.lry.lostchildinfo.entity.pojo.Role;
+import com.lry.lostchildinfo.service.RoleService;
+import com.lry.lostchildinfo.utils.ExcelUtil;
+import com.lry.lostchildinfo.utils.SecurityUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +31,112 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/lostchildinfo/role")
 public class RoleController {
+
+    @Autowired
+    RoleService roleService;
+
+    /**
+     * 角色分页查询
+     * @param rolePo
+     * @return
+     */
+    @OperationLog(describe = "角色分页查询")
+    @PostMapping("list")
+    public Result list(@RequestBody RolePo rolePo){
+        PageVo pageVo = roleService.listByPage(rolePo);
+        return Result.success(pageVo);
+    }
+
+    /**
+     * 添加角色
+     * @return
+     */
+    @OperationLog(describe = "添加角色")
+    @PostMapping("add")
+    public Result add(@RequestBody RolePo rolePo){
+        Role hasRole = roleService.getOne(new QueryWrapper<Role>().eq("role_type", rolePo.getRoleType()));
+        if (ObjectUtil.isNotEmpty(hasRole)) {
+            Role role = new Role();
+            BeanUtil.copyProperties(role, rolePo);
+            role.setCreateId(SecurityUtil.getCurrentUser().getUserId());
+            role.setCreateName(SecurityUtil.getCurrentUser().getCreateName());
+            if(roleService.save(role)){
+                return Result.success("添加成功");
+            }else{
+                return Result.error("添加失败");
+            }
+        }else {
+            return Result.error("已存在该角色");
+        }
+    }
+
+
+    /**
+     * 删除角色
+     * @param roleIds
+     * @return
+     */
+    @OperationLog(describe = "删除角色")
+    @DeleteMapping("{ids}")
+    public Result del(@PathVariable("ids") Long ...roleIds){
+        // 判断当前角色下有人，如果有，不可以删除
+        if (roleService.delByIds(roleIds)){
+            return Result.success("删除成功");
+        }else {
+            return Result.success("当前角色下有客户,禁止删除");
+        }
+    }
+
+    /**
+     * 修改角色信息
+     * @param rolePo
+     * @return
+     */
+    @OperationLog(describe = "修改角色信息")
+    @PostMapping("update")
+    public Result update(@RequestBody RolePo rolePo){
+        return Result.success("修改成功");
+    }
+
+
+    /**
+     * 根据id查询角色信息
+     * @param id
+     * @return
+     */
+    @OperationLog(describe = "根据id查询角色信息")
+    @GetMapping("{id}")
+    public Result getRoleById(@PathVariable Long id){
+        Role role = roleService.getById(id);
+        return Result.success(role);
+    }
+
+    /**
+     * 导入角色
+     * @param file
+     * @return
+     */
+    @OperationLog(describe = "导入角色")
+    @PostMapping("import")
+    public Result importRole(MultipartFile file){
+        //TODO...
+        return Result.success("导入成功");
+    }
+
+    /**
+     * 导出所有角色
+     * @param response
+     */
+    @OperationLog(describe = "导出所有角色")
+    @PostMapping("export")
+    public void exportRole(HttpServletResponse response){
+        List<Role> list = roleService.list();
+        ExcelUtil.exportExcel(response,Role.class,list,"角色表");
+    }
+
+
+
+
+
 
 }

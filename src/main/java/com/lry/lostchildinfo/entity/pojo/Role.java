@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.entity.pojo;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
@@ -33,12 +34,19 @@ public class Role implements Serializable {
     @TableField("role_name")
     private String roleName;
 
+    @ApiModelProperty("角色的值")
+    @TableField("role_value")
+    @Excel(name = "角色的值")
+    private String roleValue;
+
     @ApiModelProperty("角色类型")
     @TableField("role_type")
+    @Excel(name = "角色类型")
     private String roleType;
 
     @ApiModelProperty("创建时间")
     @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @Excel(name = "创建时间")
     private LocalDateTime createTime;
 
     @ApiModelProperty("创建人id")
@@ -47,6 +55,7 @@ public class Role implements Serializable {
 
     @ApiModelProperty("创建人")
     @TableField("create_name")
+    @Excel(name = "创建人")
     private String createName;
 
     @ApiModelProperty("更新时间")
@@ -64,6 +73,7 @@ public class Role implements Serializable {
     @ApiModelProperty("是否删除(0为未删除,1为已删除)")
     @TableField("deleted")
     @TableLogic
+    @Excel(name = "是否删除(0为未删除,1为已删除)")
     private String deleted;
 
 

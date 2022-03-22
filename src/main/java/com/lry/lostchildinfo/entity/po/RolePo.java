@@ -32,6 +32,9 @@ public class RolePo implements Serializable {
     @ApiModelProperty("角色名")
     private String roleName;
 
+    @ApiModelProperty("角色的值")
+    private String roleValue;
+
     @ApiModelProperty("角色类型")
     private String roleType;
 
