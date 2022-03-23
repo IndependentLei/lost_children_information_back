@@ -12,6 +12,7 @@ import com.lry.lostchildinfo.mapper.RoleMapper;
 import com.lry.lostchildinfo.mapper.UserRoleMapper;
 import com.lry.lostchildinfo.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public PageVo listByPage(RolePo rolePo) {
         Page<Role> page = new Page<>(rolePo.getStartPage(),rolePo.getPageSize());
-        Page<Role> rolePage = roleMapper.selectPage(page, new LambdaQueryWrapper<Role>().orderByDesc(Role::getCreateTime));
+        Page<Role> rolePage = roleMapper.selectPage(page, new LambdaQueryWrapper<Role>()
+                .like(StringUtils.isNotBlank(rolePo.getCreateName()),Role::getCreateName,rolePo.getCreateName())
+                .orderByDesc(Role::getCreateTime));
 
         PageVo pageVo = new PageVo(
                 rolePage.getCurrent(),
@@ -58,8 +61,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 return false;
             }
         }
-        int i = roleMapper.deleteBatchIds(Arrays.asList(roleIds));
 
-        return i > 0;
+        for (Long roleId : roleIds){
+            int num = roleMapper.delete(new QueryWrapper<Role>().eq("role_id", roleId));
+            if (num == 0){
+                return false;
+            }
+        }
+
+        return true;
+
+
     }
 }

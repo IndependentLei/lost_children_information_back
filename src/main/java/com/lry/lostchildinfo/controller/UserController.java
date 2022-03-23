@@ -7,9 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
-import com.lry.lostchildinfo.entity.po.AdminPo;
 import com.lry.lostchildinfo.entity.po.UserPo;
-import com.lry.lostchildinfo.entity.pojo.Admin;
 import com.lry.lostchildinfo.entity.pojo.User;
 import com.lry.lostchildinfo.entity.pojo.UserRole;
 import com.lry.lostchildinfo.entity.vo.UserVo;
@@ -17,24 +15,16 @@ import com.lry.lostchildinfo.service.UserRoleService;
 import com.lry.lostchildinfo.service.UserService;
 import com.lry.lostchildinfo.utils.ExcelUtil;
 import com.lry.lostchildinfo.utils.SecurityUtil;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.sql.ResultSet;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -165,16 +155,21 @@ public class UserController {
     @OperationLog(describe = "修改密码、重置密码")
     public Result changePwd(@RequestBody UserPo userPo){
         if (StringUtils.isNotBlank(userPo.getUserPwd())){
-            String encode = bCryptPasswordEncoder.encode(userPo.getUserPwd());
-            User user = new User();
-            user.setUserPwd(encode);
-            user.setUserId(userPo.getUserId());
+            User currentUser = SecurityUtil.getCurrentUser();
+            // 密码是否匹配
+            if (bCryptPasswordEncoder.matches(userPo.getOldPwd(), currentUser.getUserPwd())) {
+                User user = new User();
+                user.setUserPwd(bCryptPasswordEncoder.encode(userPo.getUserPwd()));
+                user.setUserId(currentUser.getUserId());
 
-            boolean save = userService.save(user);
-            if ( save ){
-                return Result.success("修改密码成功");
-            }else
-                return Result.error("修改密码失败");
+                boolean save = userService.updateById(user);
+                if (save) {
+                    return Result.success("修改密码成功");
+                } else
+                    return Result.error("修改密码失败");
+            }else {
+                return Result.error("旧密码错误");
+            }
         }else{
             // 重置的密码为 123456
             String encode = bCryptPasswordEncoder.encode("123456");
@@ -182,7 +177,7 @@ public class UserController {
             user.setUserPwd(encode);
             user.setUserId(userPo.getUserId());
 
-            boolean save = userService.save(user);
+            boolean save = userService.updateById(user);
             if ( save ){
                 return Result.success("重置密码成功");
             }else

@@ -82,4 +82,7 @@ public class UserPo implements Serializable {
 
     private String roleType;
 
+    private String oldPwd;
+
+
 }

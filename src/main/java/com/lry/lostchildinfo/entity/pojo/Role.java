@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -20,6 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 @TableName("sys_role")
 @ApiModel(value = "Role对象", description = "角色表")
 public class Role implements Serializable {
@@ -32,6 +34,7 @@ public class Role implements Serializable {
 
     @ApiModelProperty("角色名")
     @TableField("role_name")
+    @Excel(name = "角色的权限值")
     private String roleName;
 
     @ApiModelProperty("角色的值")
@@ -41,7 +44,6 @@ public class Role implements Serializable {
 
     @ApiModelProperty("角色类型")
     @TableField("role_type")
-    @Excel(name = "角色类型")
     private String roleType;
 
     @ApiModelProperty("创建时间")

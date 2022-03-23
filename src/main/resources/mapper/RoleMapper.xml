@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.lry.lostchildinfo.entity.pojo.Role">
         <id column="role_id" property="roleId" />
         <result column="role_name" property="roleName" />
+        <result column="role_value" property="roleValue" />
         <result column="role_type" property="roleType" />
         <result column="create_time" property="createTime" />
         <result column="create_id" property="createId" />

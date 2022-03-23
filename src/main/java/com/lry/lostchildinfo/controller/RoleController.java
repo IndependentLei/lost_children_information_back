@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -31,7 +33,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/lostchildinfo/role")
 public class RoleController {
-
     @Autowired
     RoleService roleService;
 
@@ -41,7 +42,7 @@ public class RoleController {
      * @return
      */
     @OperationLog(describe = "角色分页查询")
-    @PostMapping("list")
+    @PostMapping("/list")
     public Result list(@RequestBody RolePo rolePo){
         PageVo pageVo = roleService.listByPage(rolePo);
         return Result.success(pageVo);
@@ -52,14 +53,24 @@ public class RoleController {
      * @return
      */
     @OperationLog(describe = "添加角色")
-    @PostMapping("add")
+    @PostMapping("/add")
     public Result add(@RequestBody RolePo rolePo){
-        Role hasRole = roleService.getOne(new QueryWrapper<Role>().eq("role_type", rolePo.getRoleType()));
-        if (ObjectUtil.isNotEmpty(hasRole)) {
+        // 去前后空格
+        String roleValue = rolePo.getRoleValue().trim();
+        Role hasRole = roleService.getOne(new QueryWrapper<Role>().eq("role_value", roleValue));
+        if (ObjectUtil.isEmpty(hasRole)) {
             Role role = new Role();
-            BeanUtil.copyProperties(role, rolePo);
+            BeanUtil.copyProperties(rolePo, role);
+            String s = roleService
+                    .list(new QueryWrapper<Role>().between("deleted",-1,2))
+                    .stream()
+                    .map(Role::getRoleType)
+                    .max(String::compareTo)
+                    .get();
+            role.setRoleId(Long.parseLong(s)+1);
+            role.setRoleType(String.valueOf(Integer.parseInt(s)+1));
             role.setCreateId(SecurityUtil.getCurrentUser().getUserId());
-            role.setCreateName(SecurityUtil.getCurrentUser().getCreateName());
+            role.setCreateName(SecurityUtil.getCurrentUser().getUserCode());
             if(roleService.save(role)){
                 return Result.success("添加成功");
             }else{
@@ -77,13 +88,13 @@ public class RoleController {
      * @return
      */
     @OperationLog(describe = "删除角色")
-    @DeleteMapping("{ids}")
+    @DeleteMapping("/{ids}")
     public Result del(@PathVariable("ids") Long ...roleIds){
         // 判断当前角色下有人，如果有，不可以删除
         if (roleService.delByIds(roleIds)){
             return Result.success("删除成功");
         }else {
-            return Result.success("当前角色下有客户,禁止删除");
+            return Result.error("当前角色存在用户,禁止删除");
         }
     }
 
@@ -93,9 +104,17 @@ public class RoleController {
      * @return
      */
     @OperationLog(describe = "修改角色信息")
-    @PostMapping("update")
+    @PostMapping("/update")
     public Result update(@RequestBody RolePo rolePo){
-        return Result.success("修改成功");
+        Role role = new Role();
+        BeanUtil.copyProperties(rolePo,role);
+        boolean flag = roleService.updateById(role);
+        if ( flag ){
+            return Result.success("修改成功");
+        }else{
+            return Result.error("修改失败");
+        }
+
     }
 
 
@@ -105,7 +124,7 @@ public class RoleController {
      * @return
      */
     @OperationLog(describe = "根据id查询角色信息")
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Result getRoleById(@PathVariable Long id){
         Role role = roleService.getById(id);
         return Result.success(role);
@@ -117,7 +136,7 @@ public class RoleController {
      * @return
      */
     @OperationLog(describe = "导入角色")
-    @PostMapping("import")
+    @PostMapping("/import")
     public Result importRole(MultipartFile file){
         //TODO...
         return Result.success("导入成功");
@@ -128,7 +147,7 @@ public class RoleController {
      * @param response
      */
     @OperationLog(describe = "导出所有角色")
-    @PostMapping("export")
+    @GetMapping("/export")
     public void exportRole(HttpServletResponse response){
         List<Role> list = roleService.list();
         ExcelUtil.exportExcel(response,Role.class,list,"角色表");
