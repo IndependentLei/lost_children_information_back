@@ -1,5 +1,7 @@
 package com.lry.lostchildinfo.service;
 
+import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.po.ChildrenInfoPo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ChildrenInfoService extends IService<ChildrenInfo> {
 
+    PageVo listByPage(ChildrenInfoPo childrenInfoPo);
+
+    boolean add(ChildrenInfoPo childrenInfoPo);
+
+    boolean del(Long[] ids);
+
+    boolean updateChildrenInfo(ChildrenInfoPo childrenInfoPo);
 }

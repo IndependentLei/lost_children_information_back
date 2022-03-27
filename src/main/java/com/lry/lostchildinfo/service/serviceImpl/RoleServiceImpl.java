@@ -61,16 +61,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 return false;
             }
         }
+//        for (Long roleId : roleIds){
+//            int num = roleMapper.delete(new QueryWrapper<Role>().eq("role_id", roleId));
+//            if (num == 0){
+//                return false;
+//            }
+//        }
+//        return true;
 
-        for (Long roleId : roleIds){
-            int num = roleMapper.delete(new QueryWrapper<Role>().eq("role_id", roleId));
-            if (num == 0){
-                return false;
-            }
-        }
-
-        return true;
-
-
+        return roleMapper.deleteBatchIds(Arrays.asList(roleIds)) > 0;
     }
 }

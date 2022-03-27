@@ -1,12 +1,14 @@
 package com.lry.lostchildinfo.entity.po;
 
-import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
+import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -71,5 +73,20 @@ public class ChildrenInfoPo implements Serializable {
      * 页面容量
      */
     private Long pageSize;
+
+    /**
+     * 开始时间
+     */
+    private String startTime;
+
+    /**
+     * 结束时间
+     */
+    private String endTime;
+
+    /**
+     * 附件列表
+     */
+    private List<ChildrenInfoAttach> childrenInfoAttachList;
 
 }

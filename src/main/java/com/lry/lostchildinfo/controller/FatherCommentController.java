@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-01-21
  */
 @RestController
-@RequestMapping("/lostchildinfo/father-comment")
+@RequestMapping("/lostchildinfo/fatherComment")
 public class FatherCommentController {
 
 }

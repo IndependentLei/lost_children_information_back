@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.entity.pojo;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
@@ -35,26 +36,32 @@ public class ChildrenInfo implements Serializable {
 
     @ApiModelProperty("儿童姓名")
     @TableField("children_name")
+    @Excel(name = "儿童姓名")
     private String childrenName;
 
     @ApiModelProperty("儿童性别（0为女，1为男）")
     @TableField("sex")
+    @Excel(name = "儿童性别（0为女，1为男）")
     private String sex;
 
     @ApiModelProperty("儿童年纪")
     @TableField("age")
+    @Excel(name = "儿童年纪")
     private Integer age;
 
     @ApiModelProperty("丢失位置")
     @TableField("lost_location")
+    @Excel(name = "丢失位置")
     private String lostLocation;
 
     @ApiModelProperty("丢失时间")
     @TableField("lost_time")
+    @Excel(name = "丢失时间")
     private LocalDateTime lostTime;
 
     @ApiModelProperty("儿童特征")
     @TableField("children_feature")
+    @Excel(name = "儿童特征")
     private String childrenFeature;
 
     @ApiModelProperty("创建人")
@@ -76,6 +83,7 @@ public class ChildrenInfo implements Serializable {
     @ApiModelProperty("是否删除（0为未删除,1为已删除）")
     @TableField("deleted")
     @TableLogic
+    @Excel(name = "是否删除（0为未删除,1为已删除）")
     private String deleted;
 
 
