@@ -1,5 +1,7 @@
 package com.lry.lostchildinfo.entity.po;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,6 +34,9 @@ public class ChildrenInfoPo implements Serializable {
     @ApiModelProperty("关联用户表")
     private Long userId;
 
+    @ApiModelProperty("身份证")
+    private String idCard;
+
     @ApiModelProperty("儿童姓名")
     private String childrenName;
 
@@ -50,6 +55,9 @@ public class ChildrenInfoPo implements Serializable {
     @ApiModelProperty("儿童特征")
     private String childrenFeature;
 
+    @ApiModelProperty("联系电话")
+    private String contactPhone;
+
     @ApiModelProperty("创建人")
     private String createName;
 
@@ -64,6 +72,9 @@ public class ChildrenInfoPo implements Serializable {
 
     @ApiModelProperty("是否删除（0为未删除,1为已删除）")
     private String deleted;
+
+    @ApiModelProperty("是否找到（0为未找到,1为已找到）")
+    private String find;
 
     /**
      * 开始页数

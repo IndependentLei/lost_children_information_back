@@ -1,5 +1,7 @@
 package com.lry.lostchildinfo.service;
 
+import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.po.MenuPo;
 import com.lry.lostchildinfo.entity.pojo.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface MenuService extends IService<Menu> {
 
+    PageVo listByPage(MenuPo menuPo);
 }

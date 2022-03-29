@@ -48,6 +48,7 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
         Page<ChildrenInfo> page = new Page<>(childrenInfoPo.getStartPage(),childrenInfoPo.getPageSize());
         Page<ChildrenInfo> childrenInfoPage = childrenInfoMapper.selectPage(page, new LambdaQueryWrapper<ChildrenInfo>()
                 .like(StringUtils.isNotBlank(childrenInfoPo.getCreateName()), ChildrenInfo::getCreateName, childrenInfoPo.getCreateName())
+                .like(StringUtils.isNotBlank(childrenInfoPo.getIdCard()),ChildrenInfo::getIdCard,childrenInfoPo.getIdCard())
                 .like(StringUtils.isNotBlank(childrenInfoPo.getLostLocation()), ChildrenInfo::getLostLocation, childrenInfoPo.getLostLocation())
                 .like(StringUtils.isNotBlank(childrenInfoPo.getChildrenFeature()), ChildrenInfo::getChildrenFeature, childrenInfoPo.getChildrenFeature())
                 .between(StringUtils.isNotBlank(childrenInfoPo.getStartTime()) && StringUtils.isNotBlank(childrenInfoPo.getEndTime())
@@ -55,6 +56,7 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                         , childrenInfoPo.getStartTime(), childrenInfoPo.getEndTime())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getAge()), ChildrenInfo::getAge, childrenInfoPo.getAge())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getSex()), ChildrenInfo::getSex, childrenInfoPo.getSex())
+                .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getFind()),ChildrenInfo::getFind,childrenInfoPo.getFind())
                 .orderByDesc(ChildrenInfo::getCreateTime));
 
         PageVo pageVo = new PageVo(childrenInfoPage.getCurrent()

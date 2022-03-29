@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.enums.RoleType;
 import com.lry.lostchildinfo.entity.po.UserPo;
 import com.lry.lostchildinfo.entity.pojo.Role;
 import com.lry.lostchildinfo.entity.pojo.User;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -84,6 +86,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<User> allUser() {
         return userMapper.allUser();
+    }
+
+    @Override
+    public List<UserVo> getVolunteers() {
+        List<UserVo> userVos = userMapper.listByPage(new UserPo());
+        List<UserVo> collect = userVos.stream()
+                .filter(
+                        userVo -> Integer.parseInt(userVo.getRoleType()) == RoleType.VOLUNTEER.getType())
+                .collect(Collectors.toList());
+        return collect;
     }
 
 }

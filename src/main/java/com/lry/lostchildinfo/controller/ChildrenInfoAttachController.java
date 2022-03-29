@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2022-01-21
  */
 @RestController
-@RequestMapping("/lostchildinfo/children-info-attach")
+@RequestMapping("/lostchildinfo/childrenInfoAttach")
 public class ChildrenInfoAttachController {
 
     @Autowired

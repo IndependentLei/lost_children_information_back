@@ -26,4 +26,6 @@ public interface UserService extends IService<User> {
     UserVo getUserById(Long id);
 
     List<User> allUser();
+
+    List<UserVo> getVolunteers();
 }

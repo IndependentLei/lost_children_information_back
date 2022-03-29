@@ -30,6 +30,10 @@ public class ChildrenInfo implements Serializable {
     @TableId(value = "children_id", type = IdType.AUTO)
     private Long childrenId;
 
+    @ApiModelProperty("身份证号")
+    @TableField("id_card")
+    private String idCard;
+
     @ApiModelProperty("关联用户表")
     @TableField("user_id")
     private Long userId;
@@ -48,6 +52,11 @@ public class ChildrenInfo implements Serializable {
     @TableField("age")
     @Excel(name = "儿童年纪")
     private Integer age;
+
+    @ApiModelProperty("联系电话")
+    @TableField("contact_phone")
+    @Excel(name = "联系电话")
+    private String contactPhone;
 
     @ApiModelProperty("丢失位置")
     @TableField("lost_location")
@@ -85,6 +94,11 @@ public class ChildrenInfo implements Serializable {
     @TableLogic
     @Excel(name = "是否删除（0为未删除,1为已删除）")
     private String deleted;
+
+    @ApiModelProperty("是否找到（0为未找到,1为已找到）")
+    @TableField("find")
+    @Excel(name = "是否找到（0为未找到,1为已找到）")
+    private String find;
 
 
 }

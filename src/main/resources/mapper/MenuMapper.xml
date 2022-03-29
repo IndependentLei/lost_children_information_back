@@ -7,6 +7,7 @@
         <id column="menu_id" property="menuId" />
         <result column="label" property="label" />
         <result column="icon" property="icon" />
+        <result column="father_id" property="fatherId" />
         <result column="menu_path" property="menuPath" />
         <result column="component" property="component" />
         <result column="menu_name" property="menuName" />

@@ -6,9 +6,11 @@
     <resultMap id="BaseResultMap" type="com.lry.lostchildinfo.entity.pojo.ChildrenInfo">
         <id column="children_id" property="childrenId" />
         <result column="user_id" property="userId" />
+        <result column="id_card" property="idCard" />
         <result column="children_name" property="childrenName" />
         <result column="sex" property="sex" />
         <result column="age" property="age" />
+        <result column="contact_phone" property="contactPhone" />
         <result column="lost_location" property="lostLocation" />
         <result column="lost_time" property="lostTime" />
         <result column="children_feature" property="childrenFeature" />
@@ -17,6 +19,7 @@
         <result column="update_name" property="updateName" />
         <result column="update_time" property="updateTime" />
         <result column="deleted" property="deleted" />
+        <result column="find" property="find" />
     </resultMap>
 
 </mapper>

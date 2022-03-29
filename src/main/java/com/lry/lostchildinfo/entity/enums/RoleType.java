@@ -12,7 +12,8 @@ import lombok.Getter;
 @Getter
 public enum RoleType {
     ADMIN(1,"管理员"),
-    CUSTOMER(2,"客户");
+    CUSTOMER(2,"客户"),
+    VOLUNTEER(3,"自愿者");
     private final int type;
     private final String info;
 

@@ -206,4 +206,28 @@ public class UserController {
         ExcelUtil.exportExcel(response,User.class,list,"用户表");
     }
 
+    /**
+     * 更具用户账号获取用户所有信息
+     * @param userCode
+     * @return
+     */
+    @OperationLog(describe = "更具用户账号获取用户所有信息")
+    @GetMapping("/getUserByUserCode/{userCode}")
+    public Result getUserByUserCode(@PathVariable("userCode") String userCode){
+        User user = userService.getUserByName(userCode);
+        return Result.success(user);
+    }
+
+    /**
+     * 获取所有自愿者
+     * @return
+     */
+    @OperationLog(describe = "获取所有自愿者")
+    @GetMapping("volunteers")
+    public Result getVolunteers(){
+        List<UserVo> volunteers = userService.getVolunteers();
+        return Result.success(volunteers);
+    }
+
+
 }

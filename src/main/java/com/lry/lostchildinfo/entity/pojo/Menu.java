@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -32,6 +34,10 @@ public class Menu implements Serializable {
     @ApiModelProperty("菜单名")
     @TableField("label")
     private String label;
+
+    @ApiModelProperty("父菜单id")
+    @TableField("father_id")
+    private Long fatherId;
 
     @ApiModelProperty("图标")
     @TableField("icon")
@@ -70,5 +76,8 @@ public class Menu implements Serializable {
     @TableLogic
     private String deleted;
 
+    // 不是数据库字段,不进行select查询
+    @TableField(exist = false,select = false)
+    private List<Menu> children;
 
 }
