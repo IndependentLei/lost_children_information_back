@@ -1,5 +1,8 @@
 package com.lry.lostchildinfo.service;
 
+import com.lry.lostchildinfo.common.Result;
+import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.po.SonCommentPo;
 import com.lry.lostchildinfo.entity.pojo.SonComment;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +16,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SonCommentService extends IService<SonComment> {
 
+    PageVo listByPage(SonCommentPo sonCommentPo);
+
+    Result add(SonCommentPo sonCommentPo);
+
+    Result del(Long[] ids);
 }

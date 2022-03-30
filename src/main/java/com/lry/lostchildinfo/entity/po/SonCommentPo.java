@@ -59,4 +59,8 @@ public class SonCommentPo implements Serializable {
      */
     private Long pageSize;
 
+    private String startTime;
+
+    private String endTime;
+
 }
