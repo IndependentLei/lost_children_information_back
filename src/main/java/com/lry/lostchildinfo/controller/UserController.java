@@ -126,7 +126,9 @@ public class UserController {
         if (update) {
             UserRole userRole = new UserRole();
             userRole.setUserId(userPo.getUserId());
-            userRole.setRoleId(Long.valueOf(userPo.getRoleType()));
+            if (userPo.getRoleType()!=null) {
+                userRole.setRoleId(Long.valueOf(userPo.getRoleType()));
+            }
             boolean userRoleUpdate = userRoleService.update(userRole, new LambdaQueryWrapper<UserRole>().eq(ObjectUtil.isNotEmpty(userPo.getUserId()), UserRole::getUserId, userPo.getUserId()));
             if (userRoleUpdate)
                 return Result.success("更新成功");

@@ -52,4 +52,8 @@ public class FatherCommentPo implements Serializable {
      * 页面容量
      */
     private Long pageSize;
+
+    private String startTime;
+
+    private String endTime;
 }

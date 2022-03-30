@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,16 @@ public class RoleController {
     }
 
     /**
+     * 未删除的角色
+     * @return
+     */
+    @OperationLog(describe = "未删除的角色")
+    @GetMapping("noDeleteRole")
+    public Result noDeleteRole(){
+        return Result.success(roleService.list());
+    }
+
+    /**
      * 添加角色
      * @return
      */
@@ -62,7 +73,7 @@ public class RoleController {
             Role role = new Role();
             BeanUtil.copyProperties(rolePo, role);
             String s = roleService
-                    .list(new QueryWrapper<Role>().between("deleted",-1,2))
+                    .listAll()
                     .stream()
                     .map(Role::getRoleType)
                     .max(String::compareTo)
@@ -108,6 +119,8 @@ public class RoleController {
     public Result update(@RequestBody RolePo rolePo){
         Role role = new Role();
         BeanUtil.copyProperties(rolePo,role);
+        role.setUpdateId(SecurityUtil.getCurrentUser().getUserId());
+        role.setUpdateName(SecurityUtil.getCurrentUser().getUserCode());
         boolean flag = roleService.updateById(role);
         if ( flag ){
             return Result.success("修改成功");

@@ -40,6 +40,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public PageVo listByPage(RolePo rolePo) {
         Page<Role> page = new Page<>(rolePo.getStartPage(),rolePo.getPageSize());
         Page<Role> rolePage = roleMapper.selectPage(page, new LambdaQueryWrapper<Role>()
+                .like(StringUtils.isNotBlank(rolePo.getRoleValue()),Role::getRoleValue,rolePo.getRoleValue())
                 .like(StringUtils.isNotBlank(rolePo.getCreateName()),Role::getCreateName,rolePo.getCreateName())
                 .orderByDesc(Role::getCreateTime));
 
@@ -70,5 +71,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 //        return true;
 
         return roleMapper.deleteBatchIds(Arrays.asList(roleIds)) > 0;
+    }
+
+    @Override
+    public List<Role> listAll() {
+        return roleMapper.listAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.entity.pojo;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
@@ -39,14 +40,17 @@ public class FatherComment implements Serializable {
 
     @ApiModelProperty("评论人")
     @TableField("user_code")
+    @Excel(name = "评论人")
     private String userCode;
 
     @ApiModelProperty("评论内容")
     @TableField("comment_content")
+    @Excel(name = "评论内容")
     private String commentContent;
 
     @ApiModelProperty("评论时间")
     @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @Excel(name = "评论时间")
     private LocalDateTime createTime;
 
     @ApiModelProperty("是否删除(0为未删除,1为已删除)")

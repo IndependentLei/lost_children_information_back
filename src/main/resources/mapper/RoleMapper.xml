@@ -16,5 +16,8 @@
         <result column="update_id" property="updateId" />
         <result column="deleted" property="deleted" />
     </resultMap>
+    <select id="listAll" resultType="com.lry.lostchildinfo.entity.pojo.Role">
+        select * from `sys_role`;
+    </select>
 
 </mapper>
