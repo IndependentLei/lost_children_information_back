@@ -61,9 +61,9 @@ public class JwtAuthenticationTokenFilter extends BasicAuthenticationFilter {
             token = (String)redisUtil.get(jwtProperties.getHeader());
         else
             token = request.getHeader(jwtProperties.getHeader());
-        logger.info("拦截请求，解析token--------------->{}"+token);
-        logger.info("拦截请求，解析token--------------->{}"+jwtProperties.tokenStart());
-        logger.info("拦截请求，解析token--------------->{}"+StringUtils.startsWith(token,jwtProperties.tokenStart()));
+//        logger.info("拦截请求，解析token--------------->{}"+token);
+//        logger.info("拦截请求，解析token--------------->{}"+jwtProperties.tokenStart());
+//        logger.info("拦截请求，解析token--------------->{}"+StringUtils.startsWith(token,jwtProperties.tokenStart()));
         if (StringUtils.isBlank(token) || !StringUtils.startsWith(token,jwtProperties.tokenStart())){
             filterChain.doFilter(request,response);
             return;

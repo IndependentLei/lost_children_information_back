@@ -72,14 +72,10 @@ public class RoleController {
         if (ObjectUtil.isEmpty(hasRole)) {
             Role role = new Role();
             BeanUtil.copyProperties(rolePo, role);
-            String s = roleService
-                    .listAll()
-                    .stream()
-                    .map(Role::getRoleType)
-                    .max(String::compareTo)
-                    .get();
-            role.setRoleId(Long.parseLong(s)+1);
-            role.setRoleType(String.valueOf(Integer.parseInt(s)+1));
+            int count  = roleService
+                    .listAll().size();
+            role.setRoleId(count+1L);
+            role.setRoleType(String.valueOf(count+1));
             role.setCreateId(SecurityUtil.getCurrentUser().getUserId());
             role.setCreateName(SecurityUtil.getCurrentUser().getUserCode());
             if(roleService.save(role)){

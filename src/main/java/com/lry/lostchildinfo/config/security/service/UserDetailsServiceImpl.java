@@ -30,7 +30,9 @@ import javax.annotation.Resource;
 @Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private static final String PERMISSIONS_CACHE = "PermissionsCache:";
+
+    public static final String PERMISSIONS_CACHE = "PermissionsCache:";
+
     @Resource
     UserService userService;
     @Resource

@@ -7,13 +7,16 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
+import com.lry.lostchildinfo.config.security.service.UserDetailsServiceImpl;
 import com.lry.lostchildinfo.entity.po.UserPo;
 import com.lry.lostchildinfo.entity.pojo.User;
 import com.lry.lostchildinfo.entity.pojo.UserRole;
 import com.lry.lostchildinfo.entity.vo.UserVo;
 import com.lry.lostchildinfo.service.UserRoleService;
 import com.lry.lostchildinfo.service.UserService;
+import com.lry.lostchildinfo.service.serviceImpl.UserServiceImpl;
 import com.lry.lostchildinfo.utils.ExcelUtil;
+import com.lry.lostchildinfo.utils.RedisUtil;
 import com.lry.lostchildinfo.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +49,8 @@ public class UserController {
     UserService userService;
     @Autowired
     UserRoleService userRoleService;
+    @Autowired
+    RedisUtil redisUtil;
 
 
     /**
@@ -122,7 +127,8 @@ public class UserController {
     public Result update(@RequestBody UserPo userPo){
         User user = new User();
         BeanUtil.copyProperties(userPo,user);
-        boolean update = userService.update(user,new LambdaQueryWrapper<User>().eq(ObjectUtil.isNotEmpty(userPo.getUserId()), User::getUserId, userPo.getUserId()));
+        boolean update = userService.update(user,new LambdaQueryWrapper<User>()
+                .eq(ObjectUtil.isNotEmpty(userPo.getUserId()), User::getUserId, userPo.getUserId()));
         if (update) {
             UserRole userRole = new UserRole();
             userRole.setUserId(userPo.getUserId());
@@ -130,8 +136,14 @@ public class UserController {
                 userRole.setRoleId(Long.valueOf(userPo.getRoleType()));
             }
             boolean userRoleUpdate = userRoleService.update(userRole, new LambdaQueryWrapper<UserRole>().eq(ObjectUtil.isNotEmpty(userPo.getUserId()), UserRole::getUserId, userPo.getUserId()));
-            if (userRoleUpdate)
+            if (userRoleUpdate) {
+                // 更新角色的时候，删除缓存中的用户权限
+                String permissionsKey = UserDetailsServiceImpl.PERMISSIONS_CACHE+userPo.getUserId();
+                if(redisUtil.hasKey(permissionsKey)){
+                    redisUtil.del(permissionsKey);
+                }
                 return Result.success("更新成功");
+            }
             else return Result.error("更新失败");
         }
         return Result.error("更新失败");

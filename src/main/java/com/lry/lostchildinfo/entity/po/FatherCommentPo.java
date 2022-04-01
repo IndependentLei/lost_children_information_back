@@ -56,4 +56,6 @@ public class FatherCommentPo implements Serializable {
     private String startTime;
 
     private String endTime;
+
+    private String timeToString;
 }

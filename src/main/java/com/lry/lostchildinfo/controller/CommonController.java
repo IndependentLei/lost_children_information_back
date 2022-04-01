@@ -1,11 +1,13 @@
 package com.lry.lostchildinfo.controller;
 
+import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.FtpProperties;
 import com.lry.lostchildinfo.utils.FtpUtil;
 import com.lry.lostchildinfo.utils.IdUtil;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,12 @@ public class CommonController {
     @Autowired
     FtpProperties ftpProperties;
 
+    /**
+     * 通用上传文件接口
+     * @param file
+     * @return
+     */
+    @OperationLog(describe = "上传文件")
     @PostMapping("/uploadPic")
     public Result uploadPic(MultipartFile file){
         try{
