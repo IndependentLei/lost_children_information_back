@@ -50,15 +50,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.error("用户不存在");
             throw new UsernameNotFoundException("用户不存在");
         }
-        if(user.getState().equals(String.valueOf(UserState.disabled.getType()))){
+        if(user.getState().equals(String.valueOf(UserState.DISABLED.getType()))){
             log.error("禁止登录");
             throw new ServiceException("用户禁止登录");
         }
-        Role role = getUserRoleById(user.getUserId());
-        if ( role.getRoleType().equals(String.valueOf(RoleType.CUSTOMER.getType()))){
-            log.debug("客户不能登录后台");
-            throw new ServiceException("您没有权限,请联系管理员");
-        }
+//        Role role = getUserRoleById(user.getUserId());
+//        if ( role.getRoleType().equals(String.valueOf(RoleType.CUSTOMER.getType()))){
+//            log.debug("客户不能登录后台");
+//            throw new ServiceException("您没有权限,请联系管理员");
+//        }
 
         return new LoginUser(user.getUserId(),username,user.getUserPwd(), AuthorityUtils.commaSeparatedStringToAuthorityList(getAuthority(user.getUserId())));
     }

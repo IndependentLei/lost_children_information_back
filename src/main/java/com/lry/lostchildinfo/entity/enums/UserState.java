@@ -9,9 +9,9 @@ import lombok.Data;
  * @create : 2022-01-23 13:08
  */
 public enum  UserState {
-    normal(0,"正常"),
-    banned(1,"禁言"),
-    disabled(2,"禁止登录")
+    NORMAL(0,"正常"),
+    BANNED(1,"禁言"),
+    DISABLED(2,"禁止登录")
     ;
     private final Integer type;
     private final String info;

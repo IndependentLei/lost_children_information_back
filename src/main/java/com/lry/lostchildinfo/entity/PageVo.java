@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageVo implements Serializable {
+public class PageVo<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,7 @@ public class PageVo implements Serializable {
      * 查询记录
      */
 
-    private List<?> list = new ArrayList<>();
+    private List<T> list = new ArrayList<>();
 
     @Override
     public String toString() {

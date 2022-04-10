@@ -42,10 +42,10 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
                         , log.getEndExecutionTime())
                 .orderByDesc(Log::getCreateTime));
 
-        return new PageVo(pageList.getCurrent()
-                ,pageList.getSize()
-                ,pageList.getTotal()
-                ,pageList.getRecords());
+        return new PageVo<>(pageList.getCurrent()
+                , pageList.getSize()
+                , pageList.getTotal()
+                , pageList.getRecords());
     }
 
     @Override

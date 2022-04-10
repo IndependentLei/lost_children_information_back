@@ -40,7 +40,7 @@ public class SlideshowServiceImpl extends ServiceImpl<SlideshowMapper, Slideshow
                         ,slideshowPo.getState())
                 .orderByDesc(Slideshow::getCreateTime));
 
-        return new PageVo(pageList.getCurrent()
+        return new PageVo<>(pageList.getCurrent()
                 ,pageList.getSize()
                 ,pageList.getTotal()
                 ,pageList.getRecords());

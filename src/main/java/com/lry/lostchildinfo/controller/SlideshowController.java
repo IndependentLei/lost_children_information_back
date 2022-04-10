@@ -6,6 +6,7 @@ import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
@@ -186,5 +187,16 @@ public class SlideshowController {
     public void slideshowExport(HttpServletResponse response) throws UnsupportedEncodingException {
         List<Slideshow> slideshows = slideshowService.list();
         ExcelUtil.exportExcel(response, Slideshow.class,slideshows,"轮播图管理表");
+    }
+
+    /**
+     * 轮播图播放列表
+     * @return
+     */
+    @OperationLog(describe = "轮播图播放列表")
+    @GetMapping("all")
+    public Result allSlideshow(){
+
+        return Result.success(slideshowService.list(new QueryWrapper<Slideshow>().eq("state",0)));
     }
 }

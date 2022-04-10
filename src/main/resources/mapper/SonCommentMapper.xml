@@ -13,5 +13,11 @@
         <result column="replay_code" property="replayCode" />
         <result column="deleted" property="deleted" />
     </resultMap>
+    <select id="getSonCommentByFatherCommentId" parameterType="Long" resultType="com.lry.lostchildinfo.entity.vo.CommentVo">
+        select id,user_id,user_code,replay_id,replay_code,replay_context as content,create_time as createDate
+        from `tbl_son_comment`
+        where father_comment_id = #{id}
+        and deleted = '0'
+    </select>
 
 </mapper>

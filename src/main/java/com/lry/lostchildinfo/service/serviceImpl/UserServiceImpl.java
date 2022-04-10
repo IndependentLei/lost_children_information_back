@@ -1,11 +1,8 @@
 package com.lry.lostchildinfo.service.serviceImpl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
@@ -19,13 +16,10 @@ import com.lry.lostchildinfo.mapper.RoleMapper;
 import com.lry.lostchildinfo.mapper.UserMapper;
 import com.lry.lostchildinfo.mapper.UserRoleMapper;
 import com.lry.lostchildinfo.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userVOS.add(user.get(i));
         }
 
-        PageVo pageVo = new PageVo(userPo.getStartPage(),userPo.getPageSize(), (long) user.size(),userVOS);
+        PageVo<UserVo> pageVo = new PageVo<>(userPo.getStartPage(),userPo.getPageSize(), (long) user.size(),userVOS);
         return Result.success(pageVo);
     }
 

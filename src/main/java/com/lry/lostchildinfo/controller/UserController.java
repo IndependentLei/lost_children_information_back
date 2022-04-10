@@ -8,13 +8,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.config.security.service.UserDetailsServiceImpl;
+import com.lry.lostchildinfo.entity.enums.RoleType;
+import com.lry.lostchildinfo.entity.enums.UserState;
 import com.lry.lostchildinfo.entity.po.UserPo;
 import com.lry.lostchildinfo.entity.pojo.User;
 import com.lry.lostchildinfo.entity.pojo.UserRole;
 import com.lry.lostchildinfo.entity.vo.UserVo;
 import com.lry.lostchildinfo.service.UserRoleService;
 import com.lry.lostchildinfo.service.UserService;
-import com.lry.lostchildinfo.service.serviceImpl.UserServiceImpl;
 import com.lry.lostchildinfo.utils.ExcelUtil;
 import com.lry.lostchildinfo.utils.RedisUtil;
 import com.lry.lostchildinfo.utils.SecurityUtil;
@@ -71,9 +72,12 @@ public class UserController {
      */
     @PostMapping("/add")
     @OperationLog(describe = "添加用户")
-    @Transactional(rollbackFor = {RuntimeException.class})
     public Result add(@RequestBody UserPo userPo){
         User user = new User();
+        // 如果添加的的用户没有状态，使用默认状态
+        if (StringUtils.isBlank(userPo.getState())){
+            userPo.setState(String.valueOf(UserState.NORMAL.getType()));
+        }
         BeanUtil.copyProperties(userPo,user);
         User userByName = userService.getUserByName(userPo.getUserCode());
         if (ObjectUtil.isEmpty(userByName)) {
@@ -81,13 +85,20 @@ public class UserController {
             user.setCreateId(SecurityUtil.getCurrentUser().getUserId());
             user.setCreateName(SecurityUtil.getCurrentUser().getCreateName());
             if (userService.save(user)) {
+
                 User user1 = userService.getUserByName(userPo.getUserCode());
                 UserRole userRole = new UserRole();
                 userRole.setUserId(user1.getUserId());
-                userRole.setRoleId(Long.valueOf(userPo.getRoleType()));
+                // 判断是客户注册，还是后台添加人员
+                if (StringUtils.isNotBlank(userPo.getRoleType())){
+                    userRole.setRoleId(Long.valueOf(userPo.getRoleType()));
+                }else{
+                    userRole.setRoleId((long)RoleType.CUSTOMER.getType()); //
+                }
+
                 userRoleService.save(userRole);
-                return Result.success("添加成功");
-            } else return Result.error("添加失败");
+                return Result.success("注册成功");
+            } else return Result.error("注册失败");
         }
         return Result.error("用户名重复");
     }
@@ -242,6 +253,4 @@ public class UserController {
         List<UserVo> volunteers = userService.getVolunteers();
         return Result.success(volunteers);
     }
-
-
 }

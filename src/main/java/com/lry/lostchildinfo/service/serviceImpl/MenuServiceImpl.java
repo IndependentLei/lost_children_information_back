@@ -49,7 +49,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
         menuPage.setRecords(list);
 
-        PageVo pageVo = new PageVo(
+        PageVo<Menu> pageVo = new PageVo<>(
                 menuPage.getCurrent()
                 ,menuPage.getSize()
                 ,menuPage.getTotal()

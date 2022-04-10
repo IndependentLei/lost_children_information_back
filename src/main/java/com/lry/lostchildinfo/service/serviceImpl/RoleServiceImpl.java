@@ -44,7 +44,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .like(StringUtils.isNotBlank(rolePo.getCreateName()),Role::getCreateName,rolePo.getCreateName())
                 .orderByDesc(Role::getCreateTime));
 
-        PageVo pageVo = new PageVo(
+        PageVo<Role> pageVo = new PageVo<>(
                 rolePage.getCurrent(),
                 rolePage.getSize(),
                 rolePage.getTotal(),

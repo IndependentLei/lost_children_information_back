@@ -2,8 +2,12 @@ package com.lry.lostchildinfo.mapper;
 
 import com.lry.lostchildinfo.entity.pojo.FatherComment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lry.lostchildinfo.entity.vo.CommentVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FatherCommentMapper extends BaseMapper<FatherComment> {
 
+    List<CommentVo> getCommentByChilId(@Param("id") Long id);
 }

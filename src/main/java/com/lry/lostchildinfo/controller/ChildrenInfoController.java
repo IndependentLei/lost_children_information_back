@@ -130,5 +130,28 @@ public class ChildrenInfoController {
     }
 
 
+    /**
+     * 根据儿童信息id查询所有评论
+     * @param id
+     * @return
+     */
+    @OperationLog(describe = "根据儿童信息id查询所有评论")
+    @GetMapping("/commentById/{id}")
+    public Result getCommentByChildId(@PathVariable("id") Long id){
+        // 评论实体
+        return Result.success(childrenInfoService.getCommentByChildId(id));
+    }
+
+    /**
+     * 儿童信息列表和第一张图片
+     * @param childrenInfoPo
+     * @return
+     */
+    @OperationLog(describe = "儿童信息列表")
+    @PostMapping("listAndPicAttach")
+    public Result listAndPicAttach(@RequestBody ChildrenInfoPo childrenInfoPo){
+        PageVo<ChildrenInfo> pageVo = childrenInfoService.listAndPicAttachByPage(childrenInfoPo);
+        return Result.success(pageVo);
+    }
 
 }

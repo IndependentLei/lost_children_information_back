@@ -12,5 +12,11 @@
         <result column="create_time" property="createTime" />
         <result column="deleted" property="deleted" />
     </resultMap>
+    <select id="getCommentByChilId" parameterType="long" resultType="com.lry.lostchildinfo.entity.vo.CommentVo">
+        select id,user_id,user_code,comment_content as content,create_time as createDate
+        from `tbl_father_comment`
+        where children_info_id = #{id}
+        and deleted = '0'
+    </select>
 
 </mapper>

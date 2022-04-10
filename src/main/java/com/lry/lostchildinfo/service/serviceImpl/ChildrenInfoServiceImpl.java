@@ -4,29 +4,32 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.ChildrenInfoPo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import com.lry.lostchildinfo.entity.pojo.User;
+import com.lry.lostchildinfo.entity.vo.CommentUserVo;
+import com.lry.lostchildinfo.entity.vo.CommentVo;
+import com.lry.lostchildinfo.entity.vo.TargetUserVo;
 import com.lry.lostchildinfo.exception.ServiceException;
-import com.lry.lostchildinfo.mapper.ChildrenInfoAttachMapper;
 import com.lry.lostchildinfo.mapper.ChildrenInfoMapper;
+import com.lry.lostchildinfo.mapper.FatherCommentMapper;
+import com.lry.lostchildinfo.mapper.SonCommentMapper;
+import com.lry.lostchildinfo.mapper.UserMapper;
 import com.lry.lostchildinfo.service.ChildrenInfoAttachService;
 import com.lry.lostchildinfo.service.ChildrenInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lry.lostchildinfo.utils.SecurityUtil;
-import com.sun.org.apache.xpath.internal.operations.String;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.poifs.property.Child;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Security;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -43,8 +46,15 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
     ChildrenInfoMapper childrenInfoMapper;
     @Autowired
     ChildrenInfoAttachService childrenInfoAttachService;
+    @Autowired
+    FatherCommentMapper fatherCommentMapper;
+    @Autowired
+    SonCommentMapper sonCommentMapper;
+    @Autowired
+    UserMapper userMapper;
+
     @Override
-    public PageVo listByPage(ChildrenInfoPo childrenInfoPo) {
+    public PageVo<ChildrenInfo> listByPage(ChildrenInfoPo childrenInfoPo) {
         Page<ChildrenInfo> page = new Page<>(childrenInfoPo.getStartPage(),childrenInfoPo.getPageSize());
         Page<ChildrenInfo> childrenInfoPage = childrenInfoMapper.selectPage(page, new LambdaQueryWrapper<ChildrenInfo>()
                 .like(StringUtils.isNotBlank(childrenInfoPo.getCreateName()), ChildrenInfo::getCreateName, childrenInfoPo.getCreateName())
@@ -59,7 +69,7 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getFind()),ChildrenInfo::getFind,childrenInfoPo.getFind())
                 .orderByDesc(ChildrenInfo::getCreateTime));
 
-        PageVo pageVo = new PageVo(childrenInfoPage.getCurrent()
+        PageVo<ChildrenInfo> pageVo = new PageVo<>(childrenInfoPage.getCurrent()
                 ,childrenInfoPage.getSize()
                 ,childrenInfoPage.getTotal()
                 ,childrenInfoPage.getRecords());
@@ -110,5 +120,110 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
             return childrenInfoAttachService.saveBatch(childrenInfoPo.getChildrenInfoAttachList());
         }
         return false;
+    }
+
+    @Override
+    public List<CommentVo> getCommentByChildId(Long id) {
+        /**
+         * [
+         *     {
+         *         "id": 1,
+         *         "userId": 1,
+         *         "userCode": "admin",
+         *         "replayId": null,
+         *         "replayCode": null,
+         *         "commentUser": {
+         *             "id": 1,
+         *             "nickName": "admin",
+         *             "avatar": "https://file.7b114.xyz/blog_avater/2022/04/04/1649052164482413.jpg"
+         *         },
+         *         "targetUserVo": null,
+         *         "content": "很好",
+         *         "createDate": "2022-03-30 19:05:43",
+         *         "childrenList": [
+         *             {
+         *                 "id": 1,
+         *                 "userId": 1,
+         *                 "userCode": "admin",
+         *                 "replayId": 1,
+         *                 "replayCode": "mr.li",
+         *                 "commentUser": {
+         *                     "id": 1,
+         *                     "nickName": "admin",
+         *                     "avatar": "https://file.7b114.xyz/blog_avater/2022/04/04/1649052164482413.jpg"
+         *                 },
+         *                 "targetUserVo": {
+         *                     "id": 1,
+         *                     "nickName": "mr.li",
+         *                     "avatar": "https://file.7b114.xyz/blog_avater/2022/04/04/1649052164482413.jpg"
+         *                 },
+         *                 "content": "可以",
+         *                 "createDate": "2022-03-30 20:01:15",
+         *                 "childrenList": []
+         *             }
+         *         ]
+         *     }
+         * ]
+         */
+        List<CommentVo> commentList = fatherCommentMapper.getCommentByChilId(id);
+        for(CommentVo fatherComment : commentList){
+            User commentUser = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", fatherComment.getUserId()));
+            CommentUserVo commentUserVo = new CommentUserVo();
+            commentUserVo.setId(fatherComment.getUserId());
+            commentUserVo.setNickName(fatherComment.getUserCode());
+            commentUserVo.setAvatar(commentUser.getAvatarImg());
+            // 填充信息
+            fatherComment.setCommentUser(commentUserVo);
+
+
+            List<CommentVo> sonCommentList = sonCommentMapper.getSonCommentByFatherCommentId(fatherComment.getId());
+            for(CommentVo  sonComment : sonCommentList ){
+                // 评论人的信息
+                User sonCommentUser = userMapper
+                        .selectOne(new QueryWrapper<User>()
+                                .eq("user_id", sonComment.getUserId()));
+                CommentUserVo commentUserVo1 = new CommentUserVo();
+                commentUserVo1.setId(fatherComment.getUserId());
+                commentUserVo1.setNickName(fatherComment.getUserCode());
+                commentUserVo1.setAvatar(sonCommentUser.getAvatarImg());
+
+                // 填充信息
+                sonComment.setCommentUser(commentUserVo1);
+
+                // 被回复人的信息
+                User replayUser = userMapper
+                        .selectOne(new QueryWrapper<User>()
+                                .eq("user_id", sonComment.getReplayId()));
+                TargetUserVo targetUserVo = new TargetUserVo();
+                targetUserVo.setId(sonComment.getReplayId());
+                targetUserVo.setNickName(sonComment.getReplayCode());
+                targetUserVo.setAvatar(replayUser.getAvatarImg());
+                // 填入信息
+                sonComment.setTargetUser(targetUserVo);
+            }
+            fatherComment.setChildrenList(sonCommentList);
+        }
+        return commentList;
+    }
+
+    @Override
+    public PageVo<ChildrenInfo> listAndPicAttachByPage(ChildrenInfoPo childrenInfoPo) {
+        PageVo<ChildrenInfo> pageVo = listByPage(childrenInfoPo);
+        List<ChildrenInfo> childrenInfoList = pageVo.getList()
+                .stream()
+                .peek(childrenInfo -> {
+                    List<ChildrenInfoAttach> attachList = childrenInfoAttachService.list(new QueryWrapper<ChildrenInfoAttach>()
+                            .eq("children_info_id", childrenInfo.getChildrenId()));
+                    if (attachList == null) {
+                        childrenInfo.setPic("");
+                    } else {
+                        String pic = attachList.get(0).getPic();
+                        childrenInfo.setPic(pic);
+                    }
+                })
+                .collect(Collectors.toList());
+
+        pageVo.setList(childrenInfoList);
+        return pageVo;
     }
 }

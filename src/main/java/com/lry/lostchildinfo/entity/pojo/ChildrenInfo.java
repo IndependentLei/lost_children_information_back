@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -99,6 +100,10 @@ public class ChildrenInfo implements Serializable {
     @TableField("find")
     @Excel(name = "是否找到（0为未找到,1为已找到）")
     private String find;
+
+    // 不进行数据库查询
+    @TableField(select = false)
+    private String pic;
 
 
 }

@@ -9,6 +9,7 @@
         <result column="id_card" property="idCard" />
         <result column="children_name" property="childrenName" />
         <result column="sex" property="sex" />
+        <result column="pic" property="pic" />
         <result column="age" property="age" />
         <result column="contact_phone" property="contactPhone" />
         <result column="lost_location" property="lostLocation" />

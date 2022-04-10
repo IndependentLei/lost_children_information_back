@@ -55,7 +55,7 @@ public class FatherCommentServiceImpl extends ServiceImpl<FatherCommentMapper, F
                                                             , fatherCommentPo.getEndTime())
                                                     .orderByDesc(FatherComment::getCreateTime));
 
-        PageVo pageVo = new PageVo(
+        PageVo<FatherComment> pageVo = new PageVo<>(
                 fatherCommentPage.getCurrent()
                 ,fatherCommentPage.getSize()
                 ,fatherCommentPage.getTotal()
@@ -72,7 +72,7 @@ public class FatherCommentServiceImpl extends ServiceImpl<FatherCommentMapper, F
         fatherComment.setUserCode(SecurityUtil.getCurrentUser().getUserCode());
 
         int insert = fatherCommentMapper.insert(fatherComment);
-        return insert > 0 ? Result.success("评论成功"):Result.error("评论失败");
+        return insert > 0 ? Result.success("评论成功"):Result.error("评论失败,请联系管理员");
     }
 
     @Override

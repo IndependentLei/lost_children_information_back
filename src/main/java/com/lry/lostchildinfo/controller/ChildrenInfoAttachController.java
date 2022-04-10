@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,26 @@ public class ChildrenInfoAttachController {
                                                         .selectList(new QueryWrapper<ChildrenInfoAttach>()
                                                                 .eq("children_info_id", id));
         return Result.success(attachList);
+    }
+
+    /**
+     * 根据儿童信息id查询第一张图片
+     * @param ids
+     * @return
+     */
+    @OperationLog(describe = "根据儿童信息id查询第一张图片")
+    @GetMapping("/firstPic/{ids}")
+    public Result getFistAttachById(@PathVariable("ids") String[] ids){
+        List<String> picList = new ArrayList<>(15);
+        for(String id : ids){
+            ChildrenInfoAttach attach = childrenInfoAttachService.list(new QueryWrapper<ChildrenInfoAttach>().eq("children_info_id", id)).get(0);
+            if (attach == null){
+                picList.add("");
+            }else {
+                picList.add(attach.getPic());
+            }
+        }
+        return Result.success(picList);
     }
 
 }

@@ -2,12 +2,15 @@ package com.lry.lostchildinfo.service.serviceImpl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.SonCommentPo;
 import com.lry.lostchildinfo.entity.pojo.SonComment;
+import com.lry.lostchildinfo.entity.pojo.User;
 import com.lry.lostchildinfo.mapper.SonCommentMapper;
+import com.lry.lostchildinfo.mapper.UserMapper;
 import com.lry.lostchildinfo.service.SonCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lry.lostchildinfo.utils.SecurityUtil;
@@ -30,6 +33,8 @@ public class SonCommentServiceImpl extends ServiceImpl<SonCommentMapper, SonComm
 
     @Autowired
     SonCommentMapper sonCommentMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public PageVo listByPage(SonCommentPo sonCommentPo) {
@@ -47,7 +52,7 @@ public class SonCommentServiceImpl extends ServiceImpl<SonCommentMapper, SonComm
                                                     , sonCommentPo.getEndTime())
                                             .orderByDesc(SonComment::getCreateTime));
 
-        PageVo pageVo = new PageVo(
+        PageVo<SonComment> pageVo = new PageVo<>(
                 sonCommentPage.getCurrent()
                 ,sonCommentPage.getSize()
                 ,sonCommentPage.getTotal()
@@ -58,13 +63,21 @@ public class SonCommentServiceImpl extends ServiceImpl<SonCommentMapper, SonComm
 
     @Override
     public Result add(SonCommentPo sonCommentPo) {
+        // 判断是不是回复自己的
+//        if (SecurityUtil.getCurrentUser().getUserId().equals(sonCommentPo.getReplayId())){
+//            return Result.error("禁止回复自己!");
+//        }
         SonComment sonComment = new SonComment();
         BeanUtil.copyProperties(sonCommentPo,sonComment);
+
         sonComment.setUserId(SecurityUtil.getCurrentUser().getUserId());
         sonComment.setUserCode(SecurityUtil.getCurrentUser().getUserCode());
+        // 将账号放入评论表中
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", sonCommentPo.getReplayId()));
+        sonComment.setReplayCode(user.getUserCode());
 
         int insert = sonCommentMapper.insert(sonComment);
-        return insert > 0 ? Result.success("评论成功") : Result.error("评论失败");
+        return insert > 0 ? Result.success("评论成功") : Result.error("回复失败,请联系管理员");
     }
 
     @Override
