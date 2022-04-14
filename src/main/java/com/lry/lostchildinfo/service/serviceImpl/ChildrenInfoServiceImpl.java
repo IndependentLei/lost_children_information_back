@@ -4,8 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.ChildrenInfoPo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
@@ -27,7 +29,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +65,7 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
     public PageVo<ChildrenInfo> listByPage(ChildrenInfoPo childrenInfoPo) {
         Page<ChildrenInfo> page = new Page<>(childrenInfoPo.getStartPage(),childrenInfoPo.getPageSize());
         Page<ChildrenInfo> childrenInfoPage = childrenInfoMapper.selectPage(page, new LambdaQueryWrapper<ChildrenInfo>()
+                .like(StringUtils.isNotBlank(childrenInfoPo.getChildrenName()),ChildrenInfo::getChildrenName,childrenInfoPo.getChildrenName())
                 .like(StringUtils.isNotBlank(childrenInfoPo.getCreateName()), ChildrenInfo::getCreateName, childrenInfoPo.getCreateName())
                 .like(StringUtils.isNotBlank(childrenInfoPo.getIdCard()),ChildrenInfo::getIdCard,childrenInfoPo.getIdCard())
                 .like(StringUtils.isNotBlank(childrenInfoPo.getLostLocation()), ChildrenInfo::getLostLocation, childrenInfoPo.getLostLocation())
@@ -79,22 +88,32 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
     }
 
     @Override
-    public boolean add(ChildrenInfoPo childrenInfoPo) {
+    public Result add(ChildrenInfoPo childrenInfoPo) {
+        ChildrenInfo childrenInfo1 = childrenInfoMapper.selectOne(Wrappers.<ChildrenInfo>query().eq("id_card", childrenInfoPo.getIdCard()));
+        if(childrenInfo1!=null){
+            return Result.error("已存在此身份证的丢失儿童");
+        }
         ChildrenInfo childrenInfo = new ChildrenInfo();
         BeanUtil.copyProperties(childrenInfoPo,childrenInfo);
         User currentUser = SecurityUtil.getCurrentUser();
         childrenInfo.setUserId(currentUser.getUserId());
-        childrenInfo.setCreateName(currentUser.getUserName());
+        childrenInfo.setCreateName(currentUser.getUserCode());
+        childrenInfo.setFind("0"); // 未找到
 
         if (childrenInfoMapper.insert(childrenInfo) > 0){
-            for (ChildrenInfoAttach attach : childrenInfoPo.getChildrenInfoAttachList()){
-                attach.setChildrenInfoId(childrenInfo.getChildrenId());
+            ChildrenInfo childrenInfo2 = childrenInfoMapper.selectOne(Wrappers.<ChildrenInfo>query().eq("id_card", childrenInfoPo.getIdCard()));
+            List<ChildrenInfoAttach> attachList = new ArrayList<>(5);
+            for (String picUrl : childrenInfoPo.getChildrenInfoAttach()){
+                ChildrenInfoAttach attach = new ChildrenInfoAttach();
+                attach.setChildrenInfoId(childrenInfo2.getChildrenId());
+                attach.setPic(picUrl);
+                attachList.add(attach);
             }
-            if (childrenInfoAttachService.saveBatch(childrenInfoPo.getChildrenInfoAttachList())){
-                return true;
+            if (childrenInfoAttachService.saveBatch(attachList)){
+                return Result.success("添加成功");
             }
         }
-        return false;
+        return Result.error("添加失败");
     }
 
     @Override
@@ -116,9 +135,9 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
         ChildrenInfo childrenInfo = new ChildrenInfo();
         BeanUtil.copyProperties(childrenInfoPo,childrenInfo);
         int i = childrenInfoMapper.updateById(childrenInfo);
-        if ( i > 0 ){
-            return childrenInfoAttachService.saveBatch(childrenInfoPo.getChildrenInfoAttachList());
-        }
+//        if ( i > 0 ){
+//            return childrenInfoAttachService.saveBatch(childrenInfoPo.getChildrenInfoAttachList());
+//        }
         return false;
     }
 

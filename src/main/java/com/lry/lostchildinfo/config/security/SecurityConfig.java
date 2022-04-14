@@ -64,13 +64,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 不需要认证的白名单
     private static final String[] URL_WHITELIST ={
-            "/lostchildinfo/user/*",
-            "/lostchildinfo/childrenInfo/*",
-            "/lostchildinfo/childrenInfoAttach/*",
-            "/lostchildinfo/sonComment/*",
-            "/lostchildinfo/fatherComment/*",
-            "/lostchildinfo/slideshow/all",
-            "/lostchildinfo/frontHome/all",
+            "/lostchildinfo/user/**",
+            "/lostchildinfo/childrenInfo/**",
+            "/lostchildinfo/childrenInfoAttach/**",
+            "/lostchildinfo/sonComment/**",
+            "/lostchildinfo/fatherComment/**",
+            "/lostchildinfo/slideshow/**",
+            "/lostchildinfo/frontHome/**",
+            "/lostchildinfo/homePage/**",
+            "/lostchildinfo/role/**",
+            "/lostchildinfo/userrole/**",
+            "/lostchildinfo/log/**",
+            "/lostchildinfo/menu/**",
             "/common/uploadPic",
             "/login", // 登录
             "/logout/*", // 退出成功

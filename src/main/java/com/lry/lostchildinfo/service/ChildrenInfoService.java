@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.service;
 
+import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.ChildrenInfoPo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
@@ -20,7 +21,7 @@ public interface ChildrenInfoService extends IService<ChildrenInfo> {
 
     PageVo<ChildrenInfo> listByPage(ChildrenInfoPo childrenInfoPo);
 
-    boolean add(ChildrenInfoPo childrenInfoPo);
+    Result add(ChildrenInfoPo childrenInfoPo);
 
     boolean del(Long[] ids);
 

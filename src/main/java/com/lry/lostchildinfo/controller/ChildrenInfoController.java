@@ -44,7 +44,7 @@ public class ChildrenInfoController {
     @OperationLog(describe = "儿童信息列表")
     @PostMapping("list")
     public Result list(@RequestBody ChildrenInfoPo childrenInfoPo){
-        PageVo pageVo = childrenInfoService.listByPage(childrenInfoPo);
+        PageVo<ChildrenInfo> pageVo = childrenInfoService.listByPage(childrenInfoPo);
         return Result.success(pageVo);
     }
 
@@ -56,9 +56,7 @@ public class ChildrenInfoController {
     @OperationLog(describe = "新增儿童信息")
     @PostMapping("add")
     public Result add(@RequestBody ChildrenInfoPo childrenInfoPo) {
-        if (childrenInfoService.add(childrenInfoPo))
-            Result.success("操作成功");
-        return Result.error("操作失败");
+        return childrenInfoService.add(childrenInfoPo);
     }
 
     /**

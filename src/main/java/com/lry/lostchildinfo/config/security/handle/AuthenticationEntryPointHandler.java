@@ -22,7 +22,7 @@ import java.util.Map;
  * @create : 2022-01-22 22:17
  */
 @Component
-public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint, Serializable {
+public class  AuthenticationEntryPointHandler implements AuthenticationEntryPoint, Serializable {
 
     private static final long serialVersionUID = 1L;
 

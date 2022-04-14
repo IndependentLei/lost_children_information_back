@@ -88,11 +88,16 @@ public class LogAspectJ {
             if ("0:0:0:0:0:0:0:1".equals(requestIP)){
                 requestIP = "127.0.0.1";
             }
+            Log myLog = new Log();
             // 当前用户
             User user = SecurityUtil.getCurrentUser();
-            Log myLog = new Log();
+
             myLog.setUserId(user.getUserId());
             myLog.setUserCode(user.getUserCode());
+
+            myLog.setUserId(null);
+            myLog.setUserCode("");
+
             myLog.setExecutionTime(executeTime);
             myLog.setMethodName(methodName);
             myLog.setRequestUrl(requestURL.toString());

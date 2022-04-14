@@ -19,6 +19,10 @@ public class SecurityUtil {
      * @return
      */
     public static User  getCurrentUser(){
+
+        if(SecurityContextHolder.getContext().getAuthentication().getCredentials().equals("")){
+            return new User();
+        }
         // 账号
         return  (User) SecurityContextHolder.getContext().getAuthentication().getCredentials();
     }

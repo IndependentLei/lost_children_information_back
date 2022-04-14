@@ -1,7 +1,10 @@
 package com.lry.lostchildinfo.config.security.filter;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.lry.lostchildinfo.config.security.LoginUser;
 import com.lry.lostchildinfo.config.security.service.UserDetailsServiceImpl;
 import com.lry.lostchildinfo.entity.JwtProperties;
+import com.lry.lostchildinfo.entity.pojo.Log;
 import com.lry.lostchildinfo.entity.pojo.User;
 import com.lry.lostchildinfo.service.UserService;
 import com.lry.lostchildinfo.utils.JwtUtil;
@@ -88,7 +91,7 @@ public class JwtAuthenticationTokenFilter extends BasicAuthenticationFilter {
         User user = userService.getUserByName(username);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                = new UsernamePasswordAuthenticationToken(username,user, AuthorityUtils.commaSeparatedStringToAuthorityList(userDetailsService.getAuthority(user.getUserId())));
+                = new UsernamePasswordAuthenticationToken(user.getUserId(),user, AuthorityUtils.commaSeparatedStringToAuthorityList(userDetailsService.getAuthority(user.getUserId())));
 
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         filterChain.doFilter(request,response);

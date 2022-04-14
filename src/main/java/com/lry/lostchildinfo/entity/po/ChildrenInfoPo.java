@@ -2,11 +2,13 @@ package com.lry.lostchildinfo.entity.po;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -50,6 +52,7 @@ public class ChildrenInfoPo implements Serializable {
     private String lostLocation;
 
     @ApiModelProperty("丢失时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime lostTime;
 
     @ApiModelProperty("儿童特征")
@@ -85,6 +88,7 @@ public class ChildrenInfoPo implements Serializable {
      */
     private Long pageSize;
 
+
     /**
      * 开始时间
      */
@@ -99,5 +103,10 @@ public class ChildrenInfoPo implements Serializable {
      * 附件列表
      */
     private List<ChildrenInfoAttach> childrenInfoAttachList;
+
+    /**
+     * 图片列表
+     */
+    private List<String> childrenInfoAttach;
 
 }
