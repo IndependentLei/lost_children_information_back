@@ -31,4 +31,6 @@ public class HomePageVo {
      * 获得个人信息
      */
     private User user;
+
+    private EchartsVo echartsList;
 }

@@ -245,4 +245,17 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
         pageVo.setList(childrenInfoList);
         return pageVo;
     }
+
+    @Override
+    public Long findChildrenInfoNum(ChildrenInfoPo childrenInfoPo) {
+        // 查询在规定时间内的儿童信息个数
+        int childrenNum = childrenInfoMapper.selectList(Wrappers.<ChildrenInfo>lambdaQuery()
+                .between(StringUtils.isNotBlank(childrenInfoPo.getStartTime()) && StringUtils.isNotBlank(childrenInfoPo.getEndTime())
+                        , ChildrenInfo::getCreateTime
+                        , childrenInfoPo.getStartTime()
+                        , childrenInfoPo.getEndTime())).size();
+        return (long)childrenNum;
+    }
+
+
 }

@@ -30,4 +30,6 @@ public interface ChildrenInfoService extends IService<ChildrenInfo> {
     List<CommentVo> getCommentByChildId(Long id);
 
     PageVo<ChildrenInfo> listAndPicAttachByPage(ChildrenInfoPo childrenInfoPo);
+
+    Long findChildrenInfoNum(ChildrenInfoPo childrenInfoPo);
 }
