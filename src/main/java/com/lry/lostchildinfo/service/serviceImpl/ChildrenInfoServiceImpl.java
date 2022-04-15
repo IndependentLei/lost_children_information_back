@@ -138,7 +138,7 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
 //        if ( i > 0 ){
 //            return childrenInfoAttachService.saveBatch(childrenInfoPo.getChildrenInfoAttachList());
 //        }
-        return false;
+        return i > 0 ;
     }
 
     @Override

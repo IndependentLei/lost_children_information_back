@@ -30,18 +30,19 @@ class LostChildInfoApplicationTests {
     @Test
     void contextLoads() {
         List<String> tables = new ArrayList<>();
-        tables.add("sys_admin");
-        tables.add("sys_admin_menu");
-        tables.add("sys_log");
-        tables.add("sys_menu");
-        tables.add("sys_role");
-        tables.add("sys_user");
-        tables.add("sys_user_role");
-        tables.add("tbL_children_info");
-        tables.add("tbL_children_info_attach");
-        tables.add("tbl_father_comment");
-        tables.add("tbl_son_comment");
-        tables.add("tbl_slideshow");
+//        tables.add("sys_admin");
+//        tables.add("sys_admin_menu");
+//        tables.add("sys_log");
+//        tables.add("sys_menu");
+//        tables.add("sys_role");
+//        tables.add("sys_user");
+//        tables.add("sys_user_role");
+//        tables.add("tbL_children_info");
+//        tables.add("tbL_children_info_attach");
+//        tables.add("tbl_father_comment");
+//        tables.add("tbl_son_comment");
+//        tables.add("tbl_slideshow");
+//        tables.add("tbl_article");
 
         FastAutoGenerator.create("jdbc:mysql://101.132.65.76/children_lost_dev","root","NewPassWord1.")
                 .globalConfig(builder -> {

@@ -12,14 +12,13 @@ import java.util.Date;
  */
 public class TimeUtils {
     /**
-     * 获取前几天的
+     * 获取前N天的开始时间和结束时间
      * @param beforeDay
      * @return
      */
     public static String[] startTime(Integer beforeDay){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//格式化时间格式
         Date date = new Date(); //当前时间
-        //Date date = sdf.parse("2022-01-22 08:00:22");  //测试数据
         Calendar calendar = Calendar.getInstance(); //得到日历
         calendar.setTime(date);//把当前时间赋给日历
         calendar.add(Calendar.DAY_OF_MONTH, beforeDay); //设置为前一天
@@ -32,10 +31,14 @@ public class TimeUtils {
         return beforeDayTime;
     }
 
+    /**
+     * 获取前N天的日期
+     * @param beforeDay
+     * @return
+     */
     public static String dateFormat(Integer beforeDay){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//格式化时间格式
         Date date = new Date(); //当前时间
-        //Date date = sdf.parse("2022-01-22 08:00:22");  //测试数据
         Calendar calendar = Calendar.getInstance(); //得到日历
         calendar.setTime(date);//把当前时间赋给日历
         calendar.add(Calendar.DAY_OF_MONTH, beforeDay); //设置为前一天

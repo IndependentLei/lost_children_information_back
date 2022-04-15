@@ -48,10 +48,11 @@ public class FrontHomeController {
         FrontHome frontHome = new FrontHome();
         // 查询所有可用的轮播图
         List<Slideshow> list = slideshowService.list(new QueryWrapper<Slideshow>().eq("state",0));
-        // 查询前五个儿童信息
+        // 查询前五个未找到的儿童信息
         ChildrenInfoPo childrenInfoPo = new ChildrenInfoPo();
         childrenInfoPo.setStartPage(1L);
         childrenInfoPo.setPageSize(5L);
+        childrenInfoPo.setFind("0");
         PageVo<ChildrenInfo> pageVo = childrenInfoService.listByPage(childrenInfoPo);
         List<Long> collect = pageVo.getList().stream()
                 .map(ChildrenInfo::getChildrenId)
@@ -61,7 +62,8 @@ public class FrontHomeController {
         for (Long childrenInfoId : collect) {
             List<ChildrenInfoAttach> attachList = childrenInfoAttachService.getBaseMapper()
                                                     .selectList(new QueryWrapper<ChildrenInfoAttach>()
-                                                            .eq("children_info_id", childrenInfoId));
+                                                            .eq("children_info_id", childrenInfoId)
+                                                            .orderByDesc("create_time"));
             if (attachList != null && attachList.size() != 0){
                 firstPic.add(attachList.get(0).getPic());
             }else{
