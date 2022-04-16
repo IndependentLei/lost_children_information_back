@@ -1,14 +1,19 @@
 package com.lry.lostchildinfo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
+import com.lry.lostchildinfo.entity.po.ArticlePo;
 import com.lry.lostchildinfo.entity.po.ChildrenInfoPo;
+import com.lry.lostchildinfo.entity.pojo.Article;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import com.lry.lostchildinfo.entity.pojo.Slideshow;
 import com.lry.lostchildinfo.entity.vo.FrontHome;
+import com.lry.lostchildinfo.service.ArticleService;
 import com.lry.lostchildinfo.service.ChildrenInfoAttachService;
 import com.lry.lostchildinfo.service.ChildrenInfoService;
 import com.lry.lostchildinfo.service.SlideshowService;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +43,8 @@ public class FrontHomeController {
     ChildrenInfoService childrenInfoService;
     @Autowired
     ChildrenInfoAttachService childrenInfoAttachService;
+    @Autowired
+    ArticleService articleService;
 
     /**
      * 首页数据获取
@@ -71,9 +79,15 @@ public class FrontHomeController {
             }
         }
 
+        // 查询文章,默认展示10篇文章
+        Page<Article> articlePage = articleService.getBaseMapper()
+                .selectPage(new Page<>(1, 10), null);
+        List<Article> articles = articlePage.getRecords();
+
         frontHome.setSlideshows(list);
         frontHome.setChildrenInfos(pageVo.getList());
         frontHome.setFirstPic(firstPic);
+        frontHome.setArticles(articles);
 
         return Result.success(frontHome);
 

@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.entity.vo;
 
+import com.lry.lostchildinfo.entity.pojo.Article;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import com.lry.lostchildinfo.entity.pojo.Slideshow;
@@ -25,4 +26,5 @@ public class FrontHome implements Serializable {
     private List<Slideshow> slideshows;
     private List<ChildrenInfo> childrenInfos;
     private List<String> firstPic;
+    private List<Article> articles;
 }

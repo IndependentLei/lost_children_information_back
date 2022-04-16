@@ -72,7 +72,8 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                 .like(StringUtils.isNotBlank(childrenInfoPo.getChildrenFeature()), ChildrenInfo::getChildrenFeature, childrenInfoPo.getChildrenFeature())
                 .between(StringUtils.isNotBlank(childrenInfoPo.getStartTime()) && StringUtils.isNotBlank(childrenInfoPo.getEndTime())
                         , ChildrenInfo::getLostTime
-                        , childrenInfoPo.getStartTime(), childrenInfoPo.getEndTime())
+                        , childrenInfoPo.getStartTime()
+                        , childrenInfoPo.getEndTime())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getAge()), ChildrenInfo::getAge, childrenInfoPo.getAge())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getSex()), ChildrenInfo::getSex, childrenInfoPo.getSex())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getFind()),ChildrenInfo::getFind,childrenInfoPo.getFind())

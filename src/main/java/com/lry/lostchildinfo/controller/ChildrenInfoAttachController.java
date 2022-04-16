@@ -1,19 +1,22 @@
 package com.lry.lostchildinfo.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.common.Result;
+import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
 import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
 import com.lry.lostchildinfo.service.ChildrenInfoAttachService;
+import com.lry.lostchildinfo.service.ChildrenInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,6 +33,8 @@ public class ChildrenInfoAttachController {
 
     @Autowired
     ChildrenInfoAttachService childrenInfoAttachService;
+    @Autowired
+    ChildrenInfoService childrenInfoService;
 
     @OperationLog(describe = "更具儿童信息id查询附件")
     @GetMapping("{id}")
@@ -59,6 +64,37 @@ public class ChildrenInfoAttachController {
             }
         }
         return Result.success(picList);
+    }
+
+    /**
+     * 根据身份证获取儿童附件
+     * @param idCard
+     * @return
+     */
+    @OperationLog(describe = "根据身份证获取儿童附件")
+    @GetMapping("/getAttachByChildIdCard/{idCard}")
+    public Result getAttachByChildIdCard(@PathVariable("idCard") Long idCard){
+        ChildrenInfo childInfo = childrenInfoService.getOne(Wrappers.<ChildrenInfo>query()
+                .eq("id_card", idCard));
+        if (ObjectUtil.isNotNull(childInfo)) {
+            Long childrenId = childInfo.getChildrenId();
+            List<ChildrenInfoAttach> attachList = childrenInfoAttachService.list(Wrappers.<ChildrenInfoAttach>query().eq("children_info_id", childrenId));
+            return Result.success(attachList);
+        }else{
+            return Result.success(new ArrayList<ChildrenInfoAttach>());
+        }
+    }
+
+    /**
+     * 根据id删除附件
+     * @param id
+     * @return
+     */
+    @OperationLog(describe = "根据id删除附件")
+    @DeleteMapping("{id}")
+    public Result delAttach(@PathVariable("id") Long ...id){
+        boolean b = childrenInfoAttachService.removeByIds(Arrays.asList(id));
+        return b? Result.success("删除成功"):Result.error("删除失败");
     }
 
 }

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @TableName("tbl_article")
-@ApiModel(value = "Article对象", description = "")
+@ApiModel(value = "Article对象")
 public class ArticlePo implements Serializable {
 
     private static final long serialVersionUID = 1L;
