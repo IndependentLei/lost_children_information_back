@@ -10,9 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lry.lostchildinfo.common.Result;
 import com.lry.lostchildinfo.entity.PageVo;
 import com.lry.lostchildinfo.entity.po.ChildrenInfoPo;
-import com.lry.lostchildinfo.entity.pojo.ChildrenInfo;
-import com.lry.lostchildinfo.entity.pojo.ChildrenInfoAttach;
-import com.lry.lostchildinfo.entity.pojo.User;
+import com.lry.lostchildinfo.entity.pojo.*;
 import com.lry.lostchildinfo.entity.vo.CommentUserVo;
 import com.lry.lostchildinfo.entity.vo.CommentVo;
 import com.lry.lostchildinfo.entity.vo.TargetUserVo;
@@ -122,9 +120,26 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
     public boolean del(Long[] ids) {
         int i = childrenInfoMapper.deleteBatchIds(Arrays.asList(ids));
         if ( i == ids.length ){
-            for(Long id : ids){
-                if(!childrenInfoAttachService.remove(new QueryWrapper<ChildrenInfoAttach>().eq("children_info_id", id))){
+            for(Long id : ids) {
+                if (!childrenInfoAttachService.remove(new QueryWrapper<ChildrenInfoAttach>().eq("children_info_id", id))) {
                     throw new ServiceException("删除失败");
+                }
+                List<FatherComment> fatherCommentList = fatherCommentMapper.selectList(Wrappers.<FatherComment>query().eq("children_info_id", id));
+                if (ObjectUtil.isNotEmpty(fatherCommentList)) {
+                    List<Long> fatherIds = fatherCommentList.stream().map(FatherComment::getId).collect(Collectors.toList());
+                    if (fatherCommentMapper.deleteBatchIds(fatherIds) > 0) {
+                        for (Long sonId : fatherIds) {
+                            List<SonComment> sonCommentList = sonCommentMapper.selectList(Wrappers.<SonComment>query().eq("father_comment_id", sonId));
+                            if (ObjectUtil.isNotEmpty(sonCommentList)) {
+                                List<Long> sonIds = sonCommentList.stream().map(SonComment::getId).collect(Collectors.toList());
+                                if (!(sonCommentMapper.deleteBatchIds(sonIds) > 0)) {
+                                    throw new ServiceException("删除失败");
+                                }
+                            }
+                        }
+                    } else {
+                        throw new ServiceException("删除失败");
+                    }
                 }
             }
         }
