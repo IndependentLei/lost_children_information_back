@@ -1,9 +1,11 @@
 package com.lry.lostchildinfo.config.security.handle;
 
 import com.alibaba.fastjson.JSON;
+import com.lry.lostchildinfo.config.security.LoginUser;
 import com.lry.lostchildinfo.entity.JwtProperties;
 import com.lry.lostchildinfo.utils.JwtUtil;
 import com.lry.lostchildinfo.utils.RedisUtil;
+import com.lry.lostchildinfo.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -53,7 +55,8 @@ public class LoginSuccessHandle implements AuthenticationSuccessHandler {
         String token = jwtUtil.createJwt(authentication.getName());
         map.put(jwtProperties.getHeader(),jwtProperties.tokenStart()+token);
         // 登录成功生成把token存入redis，过期时间为一天
-        redisUtil.set(jwtProperties.getHeader(),jwtProperties.tokenStart()+token,jwtProperties.getExpire()/1000 );
+        LoginUser principal = (LoginUser) authentication.getPrincipal();
+        redisUtil.set(jwtProperties.getHeader()+principal.getUserId(),jwtProperties.tokenStart()+token,jwtProperties.getExpire()/1000 );
         writer.write(JSON.toJSONString(map));
         writer.flush();
         writer.close();

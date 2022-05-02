@@ -1,5 +1,6 @@
 package com.lry.lostchildinfo.aspectj;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.lry.lostchildinfo.annotation.OperationLog;
 import com.lry.lostchildinfo.entity.pojo.Log;
 import com.lry.lostchildinfo.entity.pojo.User;
@@ -92,11 +93,13 @@ public class LogAspectJ {
             // 当前用户
             User user = SecurityUtil.getCurrentUser();
 
-            myLog.setUserId(user.getUserId());
-            myLog.setUserCode(user.getUserCode());
-
-            myLog.setUserId(null);
-            myLog.setUserCode("");
+            if(ObjectUtil.isEmpty(user)){
+                myLog.setUserId(null);
+                myLog.setUserCode("");
+            }else {
+                myLog.setUserId(user.getUserId());
+                myLog.setUserCode(user.getUserCode());
+            }
 
             myLog.setExecutionTime(executeTime);
             myLog.setMethodName(methodName);
