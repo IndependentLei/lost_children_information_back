@@ -2,11 +2,14 @@ package com.lry.lostchildinfo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.lry.lostchildinfo.entity.JwtProperties;
+import com.lry.lostchildinfo.entity.pojo.Article;
+import com.lry.lostchildinfo.service.ArticleService;
 import com.lry.lostchildinfo.utils.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -135,6 +139,22 @@ class LostChildInfoApplicationTests {
         System.out.println(jwtProperties.getHeader());
         System.out.println(jwtProperties.getSecret());
         System.out.println(jwtProperties.tokenStart());
+    }
+
+    @Autowired
+    ArticleService articleService;
+
+    @Test
+    public void test4(){
+        Article article = new Article();
+        article.setUserId(1L);
+        article.setUserCode("admin");
+        article.setTitle("小米11");
+        article.setPicUrl("https://file.7b114.xyz/blog_avater/2022/04/16/1650102303395155.jpg");
+        article.setCreateTime(LocalDateTime.now());
+        article.setContent("性能怪物1111");
+        articleService.saveOrUpdate(article,
+                Wrappers.<Article>query().eq("title",article.getTitle()));
     }
 
 }

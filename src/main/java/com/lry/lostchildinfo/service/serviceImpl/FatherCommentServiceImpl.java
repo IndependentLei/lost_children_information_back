@@ -68,9 +68,6 @@ public class FatherCommentServiceImpl extends ServiceImpl<FatherCommentMapper, F
     public Result add(FatherCommentPo fatherCommentPo) {
         FatherComment fatherComment = new FatherComment();
         BeanUtil.copyProperties(fatherCommentPo,fatherComment);
-        fatherComment.setUserId(SecurityUtil.getCurrentUser().getUserId());
-        fatherComment.setUserCode(SecurityUtil.getCurrentUser().getUserCode());
-
         int insert = fatherCommentMapper.insert(fatherComment);
         return insert > 0 ? Result.success("评论成功"):Result.error("评论失败,请联系管理员");
     }

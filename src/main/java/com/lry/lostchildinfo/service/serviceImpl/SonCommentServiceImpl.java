@@ -69,9 +69,6 @@ public class SonCommentServiceImpl extends ServiceImpl<SonCommentMapper, SonComm
 //        }
         SonComment sonComment = new SonComment();
         BeanUtil.copyProperties(sonCommentPo,sonComment);
-
-        sonComment.setUserId(SecurityUtil.getCurrentUser().getUserId());
-        sonComment.setUserCode(SecurityUtil.getCurrentUser().getUserCode());
         // 将账号放入评论表中
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", sonCommentPo.getReplayId()));
         sonComment.setReplayCode(user.getUserCode());

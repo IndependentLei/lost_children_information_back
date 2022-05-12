@@ -218,8 +218,8 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                         .selectOne(new QueryWrapper<User>()
                                 .eq("user_id", sonComment.getUserId()));
                 CommentUserVo commentUserVo1 = new CommentUserVo();
-                commentUserVo1.setId(fatherComment.getUserId());
-                commentUserVo1.setNickName(fatherComment.getUserCode());
+                commentUserVo1.setId(sonCommentUser.getUserId());
+                commentUserVo1.setNickName(sonCommentUser.getUserCode());
                 commentUserVo1.setAvatar(sonCommentUser.getAvatarImg());
 
                 // 填充信息
