@@ -253,8 +253,12 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                     if (attachList == null) {
                         childrenInfo.setPic("");
                     } else {
-                        String pic = attachList.get(0).getPic();
-                        childrenInfo.setPic(pic);
+                        if(attachList.size() != 0) {
+                            String pic = attachList.get(0).getPic();
+                            childrenInfo.setPic(pic);
+                        }else {
+                            childrenInfo.setPic("");
+                        }
                     }
                     List<CommentVo> commentList = getCommentByChildId(childrenInfo.getChildrenId());
                     int fatherComment = commentList.size();
