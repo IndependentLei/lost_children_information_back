@@ -75,6 +75,7 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getAge()), ChildrenInfo::getAge, childrenInfoPo.getAge())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getSex()), ChildrenInfo::getSex, childrenInfoPo.getSex())
                 .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getFind()),ChildrenInfo::getFind,childrenInfoPo.getFind())
+                .eq(ObjectUtil.isNotEmpty(childrenInfoPo.getUserId()),ChildrenInfo::getUserId,childrenInfoPo.getUserId())
                 .orderByDesc(ChildrenInfo::getCreateTime));
 
         PageVo<ChildrenInfo> pageVo = new PageVo<>(childrenInfoPage.getCurrent()
@@ -255,6 +256,13 @@ public class ChildrenInfoServiceImpl extends ServiceImpl<ChildrenInfoMapper, Chi
                         String pic = attachList.get(0).getPic();
                         childrenInfo.setPic(pic);
                     }
+                    List<CommentVo> commentList = getCommentByChildId(childrenInfo.getChildrenId());
+                    int fatherComment = commentList.size();
+                    int sonComment = 0;
+                    for(CommentVo commentVo : commentList){
+                        sonComment += commentVo.getChildrenList().size();
+                    }
+                    childrenInfo.setCommentNum(String.valueOf(fatherComment + sonComment));
                 })
                 .collect(Collectors.toList());
 

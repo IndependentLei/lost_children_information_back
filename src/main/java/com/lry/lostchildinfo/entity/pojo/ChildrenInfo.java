@@ -105,5 +105,9 @@ public class ChildrenInfo implements Serializable {
     @TableField(select = false)
     private String pic;
 
+    // 不进行数据库查询
+    @TableField(select = false)
+    private String commentNum;
+
 
 }
